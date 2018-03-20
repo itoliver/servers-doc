@@ -1,0 +1,879 @@
+centos6升级到centos7 升级过程 2015-03-20 17:34:03 
+
+
+
+分类： 系统运维
+
+
+参考 http://wiki.centos.org/TipsAndTricks/CentOSUpgradeTool
+
+
+
+
+ 1、安装升级仓库
+
+
+# 编辑保存仓库文件
+ vi /etc/yum.repos.d/upgradtool.repo
+
+
+ [upg]
+ name=CentOS-$releasever - Upgrade Tool
+ baseurl=http://dev.centos.org/centos/6/upg/x86_64/
+ gpgcheck=1
+ enabled=1
+ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+
+
+ # yum 安装
+yum install redhat-upgrade-tool preupgrade-assistant-contents
+
+
+ upg                                                                                                                           | 1.9 kB     00:00     
+ upg/primary_db                                                                                                                |  14 kB     00:00     
+ Resolving Dependencies
+ --> Running transaction check
+ ---> Package preupgrade-assistant-contents.noarch 0:0.5.14-1.el6.centos will be installed
+ --> Processing Dependency: preupgrade-assistant(x86-64) >= 1.0.2-14 for package: preupgrade-assistant-contents-0.5.14-1.el6.centos.noarch
+ ---> Package redhat-upgrade-tool.noarch 1:0.7.22-3.el6.centos will be installed
+ --> Running transaction check
+ ---> Package preupgrade-assistant.x86_64 0:1.0.2-36.0.1.el6.centos will be installed
+ --> Processing Dependency: openscap(x86-64) >= 0.9.3-1 for package: preupgrade-assistant-1.0.2-36.0.1.el6.centos.x86_64
+ --> Processing Dependency: pkgconfig(libpcre) for package: preupgrade-assistant-1.0.2-36.0.1.el6.centos.x86_64
+ --> Running transaction check
+ ---> Package openscap.x86_64 0:1.0.8-1.0.1.el6.centos.1 will be installed
+ ---> Package pcre-devel.x86_64 0:7.8-6.el6 will be installed
+ --> Finished Dependency Resolution
+
+
+ Dependencies Resolved
+
+
+ =====================================================================================================================================================
+  Package                                         Arch                     Version                                       Repository              Size
+ =====================================================================================================================================================
+ Installing:
+  preupgrade-assistant-contents                   noarch                   0.5.14-1.el6.centos                           upg                    917 k
+  redhat-upgrade-tool                             noarch                   1:0.7.22-3.el6.centos                         upg                     85 k
+ Installing for dependencies:
+  openscap                                        x86_64                   1.0.8-1.0.1.el6.centos.1                      base                   2.9 M
+  pcre-devel                                      x86_64                   7.8-6.el6                                     base                   318 k
+  preupgrade-assistant                            x86_64                   1.0.2-36.0.1.el6.centos                       upg                    439 k
+
+
+ Transaction Summary
+ =====================================================================================================================================================
+ Install       5 Package(s)
+
+
+
+
+ Is this ok [y/N]: y
+ Downloading Packages:
+ (1/5): openscap-1.0.8-1.0.1.el6.centos.1.x86_64.rpm                                                                           | 2.9 MB     00:01     
+ (2/5): pcre-devel-7.8-6.el6.x86_64.rpm                                                                                        | 318 kB     00:00     
+ (3/5): preupgrade-assistant-1.0.2-36.0.1.el6.centos.x86_64.rpm                                                                | 439 kB     00:04     
+ (4/5): preupgrade-assistant-contents-0.5.14-1.el6.centos.noarch.rpm                                                           | 917 kB     00:21     
+ (5/5): redhat-upgrade-tool-0.7.22-3.el6.centos.noarch.rpm                                                                     |  85 kB     00:02     
+ -----------------------------------------------------------------------------------------------------------------------------------------------------
+ Total                                                                                                                148 kB/s | 4.6 MB     00:31     
+ Running rpm_check_debug
+ Running Transaction Test
+ Transaction Test Succeeded
+ Running Transaction
+   Installing : pcre-devel-7.8-6.el6.x86_64                                                                                                       1/5 
+   Installing : openscap-1.0.8-1.0.1.el6.centos.1.x86_64                                                                                          2/5 
+   Installing : preupgrade-assistant-1.0.2-36.0.1.el6.centos.x86_64                                                                               3/5 
+   Installing : 1:redhat-upgrade-tool-0.7.22-3.el6.centos.noarch                                                                                  4/5 
+   Installing : preupgrade-assistant-contents-0.5.14-1.el6.centos.noarch                                                                          5/5 
+   Verifying  : openscap-1.0.8-1.0.1.el6.centos.1.x86_64                                                                                          1/5 
+   Verifying  : pcre-devel-7.8-6.el6.x86_64                                                                                                       2/5 
+   Verifying  : preupgrade-assistant-1.0.2-36.0.1.el6.centos.x86_64                                                                               3/5 
+   Verifying  : 1:redhat-upgrade-tool-0.7.22-3.el6.centos.noarch                                                                                  4/5 
+   Verifying  : preupgrade-assistant-contents-0.5.14-1.el6.centos.noarch                                                                          5/5 
+
+
+ Installed:
+   preupgrade-assistant-contents.noarch 0:0.5.14-1.el6.centos                     redhat-upgrade-tool.noarch 1:0.7.22-3.el6.centos                    
+
+
+ Dependency Installed:
+   openscap.x86_64 0:1.0.8-1.0.1.el6.centos.1        pcre-devel.x86_64 0:7.8-6.el6        preupgrade-assistant.x86_64 0:1.0.2-36.0.1.el6.centos       
+
+
+ Complete!
+
+
+ 2、检测系统可否升级
+
+
+# 运行检测工具，结果显示可行
+preupg -l
+ CentOS6_7
+
+
+ 3、运行模拟升级工具
+
+
+preupg -s CentOS6_7
+ Preupg tool doesn't do the actual upgrade.
+
+
+ Please ensure you have backed up your system and/or data in the event of a failed upgrade
+  that would require a full re-install of the system from installation media.
+ Do you want to continue? y/n
+
+
+
+
+ You have to choose one of y/n.
+ y
+ Gathering logs used by preupgrade assistant:
+ All installed packages : 01/11 ...finished (time 00:01s)
+ All changed files      : 02/11 ...finished (time 01:27s)
+ Changed config files   : 03/11 ...finished (time 00:00s)
+ All users              : 04/11 ...finished (time 00:00s)
+ All groups             : 05/11 ...finished (time 00:00s)
+ Service statuses       : 06/11 ...finished (time 00:00s)
+ All installed files    : 07/11 ...finished (time 00:03s)
+ All local files        : 08/11 ...finished (time 00:34s)
+ All executable files   : 09/11 ...finished (time 00:29s)
+ RedHat signed packages : 10/11 ...finished (time 00:00s)
+ CentOS signed packages : 11/11 ...finished (time 00:00s)
+ Assessment of the system, running checks / SCE scripts:
+ 001/096 ...done    (Configuration Files to Review)
+ 002/096 ...done    (File Lists for Manual Migration)
+ 003/096 ...done    (Bacula Backup Software)
+ 004/096 ...done    (MySQL configuration)
+ 005/096 ...done    (Migration of the MySQL data stack)
+ 006/096 ...done    (Changes related to moving from MySQL to MariaDB)
+ 007/096 ...done    (PostgreSQL upgrade content)
+ 008/096 ...done    (GNOME Desktop Environment underwent several design modifications in CentOS 7 release)
+ 009/096 ...done    (KDE Desktop Environment underwent several design modifications in CentOS 7 release)
+ 010/096 ...done    (several graphic drivers not supported in CentOS 7)
+ 011/096 ...done    (several input drivers not supported in CentOS 7)
+ 012/096 ...done    (several kernel networking drivers not available in CentOS 7)
+ 013/096 ...done    (several kernel storage drivers not available in CentOS 7)
+ 014/096 ...done    (Names, Options and Output Format Changes in arptables)
+ 015/096 ...done    (BIND9 running in a chroot environment check.)
+ 016/096 ...done    (BIND9 configuration compatibility check)
+ 017/096 ...done    (Move dhcpd/dhcprelay arguments from /etc/sysconfig/* to *.service files)
+ 018/096 ...done    (DNSMASQ configuration compatibility check)
+ 019/096 ...done    (Dovecot configuration compatibility check)
+ 020/096 ...done    (Compatibility Between iptables and ip6tables)
+ 021/096 ...done    (Net-SNMP check)
+ 022/096 ...done    (Squid configuration compatibility check)
+ 023/096 ...done    (Reusable Configuration Files)
+ 024/096 ...done    (VCS repositories)
+ 025/096 ...done    (Added and extended options for BIND9 configuration)
+ 026/096 ...done    (Added options in DNSMASQ configuration)
+ 027/096 ...done    (Packages not signed by CentOS)
+ 028/096 ...done    (Obsoleted rpms)
+ 029/096 ...done    (w3m not available in CentOS 7)
+ 030/096 ...done    (report incompatibilities between CentOS 6 and 7 in qemu-guest-agent package)
+ 031/096 ...done    (Removed options in coreutils binaries)
+ 032/096 ...done    (Removed options in gawk binaries)
+ 033/096 ...done    (Removed options in netstat binary)
+ 034/096 ...done    (Removed options in quota tools)
+ 035/096 ...done    (Removed rpms)
+ 036/096 ...done    (Replaced rpms)
+ 037/096 ...done    (GMP library incompatibilities)
+ 038/096 ...done    (package downgrades)
+ 039/096 ...done    (restore custom selinux configuration)
+ 040/096 ...done    (General)
+ 041/096 ...done    (samba shared directories selinux)
+ 042/096 ...done    (CUPS Browsing/BrowsePoll configuration)
+ 043/096 ...done    (CVS Package Split)
+ 044/096 ...done    (FreeRADIUS Upgrade Verification)
+ 045/096 ...done    (httpd configuration compatibility check)
+ 046/096 ...done    (bind-dyndb-ldap)
+ 047/096 ...done    (Identity Management Server compatibility check)
+ 048/096 ...done    (IPA Server CA Verification)
+ 049/096 ...done    (NTP configuration)
+ 050/096 ...done    (Information on time-sync.target)
+ 051/096 ...done    (OpenLDAP /etc/sysconfig and data compatibility)
+ 052/096 ...done    (OpenSSH sshd_config migration content)
+ 053/096 ...done    (OpenSSH sysconfig migration content)
+ 054/096 ...done    (Configuration for quota_nld service)
+ 055/096 ...done    (Disk quota netlink message daemon moved into quota-nld package)
+ 056/096 ...done    (SSSD compatibility check)
+ 057/096 ...done    (Luks encrypted partition)
+ 058/096 ...done    (Clvmd and cmirrord daemon management.)
+ 059/096 ...done    (State of LVM2 services.)
+ 060/096 ...done    (device-mapper-multipath configuration compatibility check)
+ 061/096 ...done    (Removal of scsi-target-utils)
+ 062/096 ...done    (Configuration for warnquota tool)
+ 063/096 ...done    (Disk quota tool warnquota moved into quota-warnquota package)
+ 064/096 ...done    (Architecture Support)
+ 065/096 ...running (Binary rebuilds)
+ done    (Binary rebuilds)
+ 066/096 ...done    (Debuginfo packages)
+ 067/096 ...done    (Cluster and High Availability)
+ 068/096 ...done    (Quorum implementation)
+ 069/096 ...done    (fix krb5kdc config file)
+ 070/096 ...done    (File Systems, Partitions and Mounts Configuration Review)
+ 071/096 ...done    (Read Only FHS directories)
+ 072/096 ...done    (Sonamebumped libs)
+ 073/096 ...done    (SonameKept Reusable Dynamic Libraries)
+ 074/096 ...done    (Removed .so libs)
+ 075/096 ...done    (In-place Upgrade Requirements for the /usr/ Directory)
+ 076/096 ...done    (CA certificate bundles modified)
+ 077/096 ...done    (Developer Tool Set packages)
+ 078/096 ...done    (Hyper-V)
+ 079/096 ...done    (Content for enabling and disabling services based on CentOS 6 system)
+ 080/096 ...done    (Check for ethernet interface naming)
+ 081/096 ...done    (User modification in /etc/rc.local and /etc/rc.d/rc.local)
+ 082/096 ...done    (cgroups configuration compatibility check)
+ 083/096 ...done    (Plugable authentication modules (PAM))
+ 084/096 ...done    (Foreign Perl modules)
+ 085/096 ...done    (Python 2.7.5)
+ 086/096 ...done    (Ruby 2.0.0)
+ 087/096 ...done    (SCL collections)
+ 088/096 ...done    (System kickstart)
+ 089/096 ...done    (YUM)
+ 090/096 ...done    (Check for usage of dangerous range of UID/GIDs)
+ 091/096 ...done    (Incorrect usage of reserved UID/GIDs)
+ 092/096 ...done    (NIS ypbind config files back-up)
+ 093/096 ...done    (NIS Makefile back-up)
+ 094/096 ...done    (NIS server maps check)
+ 095/096 ...done    (NIS server MAXUID and MAXGID limits check)
+ 096/096 ...done    (NIS server config file back-up)
+ Assessment finished (time 22:20s)
+ Result table with checks and their results for main contents:
+ ---------------------------------------------------------------------------------------------------------------
+ |Bacula Backup Software                                                                    |notapplicable     |
+ |Migration of the MySQL data stack                                                         |notapplicable     |
+ |Changes related to moving from MySQL to MariaDB                                           |notapplicable     |
+ |PostgreSQL upgrade content                                                                |notapplicable     |
+ |GNOME Desktop Environment underwent several design modifications in CentOS 7 release      |notapplicable     |
+ |KDE Desktop Environment underwent several design modifications in CentOS 7 release        |notapplicable     |
+ |several graphic drivers not supported in CentOS 7                                         |notapplicable     |
+ |several input drivers not supported in CentOS 7                                           |notapplicable     |
+ |Names, Options and Output Format Changes in arptables                                     |notapplicable     |
+ |BIND9 running in a chroot environment check.                                              |notapplicable     |
+ |BIND9 configuration compatibility check                                                   |notapplicable     |
+ |Move dhcpd/dhcprelay arguments from /etc/sysconfig/* to *.service files                   |notapplicable     |
+ |DNSMASQ configuration compatibility check                                                 |notapplicable     |
+ |Dovecot configuration compatibility check                                                 |notapplicable     |
+ |Net-SNMP check                                                                            |notapplicable     |
+ |Squid configuration compatibility check                                                   |notapplicable     |
+ |Added and extended options for BIND9 configuration                                        |notapplicable     |
+ |Added options in DNSMASQ configuration                                                    |notapplicable     |
+ |w3m not available in CentOS 7                                                             |notapplicable     |
+ |report incompatibilities between CentOS 6 and 7 in qemu-guest-agent package               |notapplicable     |
+ |restore custom selinux configuration                                                      |notapplicable     |
+ |samba shared directories selinux                                                          |notapplicable     |
+ |FreeRADIUS Upgrade Verification                                                           |notapplicable     |
+ |bind-dyndb-ldap                                                                           |notapplicable     |
+ |Identity Management Server compatibility check                                            |notapplicable     |
+ |IPA Server CA Verification                                                                |notapplicable     |
+ |OpenLDAP /etc/sysconfig and data compatibility                                            |notapplicable     |
+ |SSSD compatibility check                                                                  |notapplicable     |
+ |Clvmd and cmirrord daemon management.                                                     |notapplicable     |
+ |device-mapper-multipath configuration compatibility check                                 |notapplicable     |
+ |Removal of scsi-target-utils                                                              |notapplicable     |
+ |Quorum implementation                                                                     |notapplicable     |
+ |fix krb5kdc config file                                                                   |notapplicable     |
+ |Ruby 2.0.0                                                                                |notapplicable     |
+ |NIS ypbind config files back-up                                                           |notapplicable     |
+ |NIS Makefile back-up                                                                      |notapplicable     |
+ |NIS server maps check                                                                     |notapplicable     |
+ |NIS server MAXUID and MAXGID limits check                                                 |notapplicable     |
+ |NIS server config file back-up                                                            |notapplicable     |
+ |several kernel networking drivers not available in CentOS 7                               |pass              |
+ |several kernel storage drivers not available in CentOS 7                                  |pass              |
+ |Reusable Configuration Files                                                              |pass              |
+ |NTP configuration                                                                         |pass              |
+ |Information on time-sync.target                                                           |pass              |
+ |OpenSSH sshd_config migration content                                                     |pass              |
+ |Configuration for quota_nld service                                                       |pass              |
+ |Disk quota netlink message daemon moved into quota-nld package                            |pass              |
+ |Luks encrypted partition                                                                  |pass              |
+ |Configuration for warnquota tool                                                          |pass              |
+ |Architecture Support                                                                      |pass              |
+ |Debuginfo packages                                                                        |pass              |
+ |Cluster and High Availability                                                             |pass              |
+ |Read Only FHS directories                                                                 |pass              |
+ |In-place Upgrade Requirements for the /usr/ Directory                                     |pass              |
+ |CA certificate bundles modified                                                           |pass              |
+ |Developer Tool Set packages                                                               |pass              |
+ |Hyper-V                                                                                   |pass              |
+ |Check for ethernet interface naming                                                       |pass              |
+ |User modification in /etc/rc.local and /etc/rc.d/rc.local                                 |pass              |
+ |Plugable authentication modules (PAM)                                                     |pass              |
+ |SCL collections                                                                           |pass              |
+ |System kickstart                                                                          |pass              |
+ |Incorrect usage of reserved UID/GIDs                                                      |pass              |
+ |MySQL configuration                                                                       |informational     |
+ |Compatibility Between iptables and ip6tables                                              |informational     |
+ |Removed options in coreutils binaries                                                     |informational     |
+ |Removed options in gawk binaries                                                          |informational     |
+ |Removed options in netstat binary                                                         |informational     |
+ |Removed options in quota tools                                                            |informational     |
+ |GMP library incompatibilities                                                             |informational     |
+ |CVS Package Split                                                                         |informational     |
+ |httpd configuration compatibility check                                                   |informational     |
+ |Disk quota tool warnquota moved into quota-warnquota package                              |informational     |
+ |File Systems, Partitions and Mounts Configuration Review                                  |informational     |
+ |Sonamebumped libs                                                                         |informational     |
+ |SonameKept Reusable Dynamic Libraries                                                     |informational     |
+ |Removed .so libs                                                                          |informational     |
+ |YUM                                                                                       |informational     |
+ |Replaced rpms                                                                             |fixed             |
+ |package downgrades                                                                        |fixed             |
+ |CUPS Browsing/BrowsePoll configuration                                                    |fixed             |
+ |OpenSSH sysconfig migration content                                                       |fixed             |
+ |State of LVM2 services.                                                                   |fixed             |
+ |Configuration Files to Review                                                             |needs_inspection  |
+ |File Lists for Manual Migration                                                           |needs_inspection  |
+ |Obsoleted rpms                                                                            |needs_inspection  |
+ |Binary rebuilds                                                                           |needs_inspection  |
+ |Foreign Perl modules                                                                      |needs_inspection  |
+ |Python 2.7.5                                                                              |needs_inspection  |
+ |Check for usage of dangerous range of UID/GIDs                                            |needs_inspection  |
+ |Packages not signed by CentOS                                                             |needs_action      |
+ |Removed rpms                                                                              |needs_action      |
+ |General                                                                                   |needs_action      |
+ |Content for enabling and disabling services based on CentOS 6 system                      |needs_action      |
+ |cgroups configuration compatibility check                                                 |needs_action      |
+ |VCS repositories                                                                          |error             |
+ ---------------------------------------------------------------------------------------------------------------
+ Tarball with results is stored here /root/preupgrade-results/preupg_results-150228152538.tar.gz .
+ The latest assessment is stored in directory /root/preupgrade .
+ Summary information:
+ We found some potential in-place upgrade risks.
+ Read the file /root/preupgrade/result.html for more details.
+ Upload results to UI by command:
+ e.g. preupg -u http://127.0.0.1:8099/submit/ -r /root/preupgrade-results/preupg_results-*.tar.gz .
+
+
+ 4、根据模拟升级的检测结果进行确认和评估
+
+
+review result.html  确认有问题的地方是否影响系统升级，确认无误即可执行下列升级 
+
+
+5、安装升级用的centos7 rpm key 
+
+
+ rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7
+
+
+ 6、运行升级工具
+
+
+centos-upgrade-tool-cli --network 7 --instrepo=http://mirror.centos.org/centos/7/os/x86_64/
+
+
+ setting up repos...
+ cmdline-instrepo                                                                                                              | 3.6 kB     00:00     
+ cmdline-instrepo/primary_db                                                                                                   | 4.9 MB     01:02     
+ epel/metalink                                                                                                                 | 4.6 kB     00:00     
+ epel                                                                                                                          | 4.4 kB     00:00     
+ epel/primary_db                                                                                                               | 6.4 MB     00:03     
+ rpmforge                                                                                                                      | 1.9 kB     00:00     
+ rpmforge/primary_db                                                                                                           | 2.7 MB     00:01     
+ rpmfusion-free-updates                                                                                                        | 2.7 kB     00:00     
+ rpmfusion-free-updates/primary_db                                                                                             | 267 kB     00:02     
+ upg                                                                                                                           | 1.9 kB     00:00     
+ upg/primary_db                                                                                                                |  14 kB     00:00     
+ No upgrade available for the following repos: base extras updates
+ .treeinfo                                                                                                                     | 1.1 kB     00:00     
+ Preupgrade assistant risk check found risks for this upgrade.
+ You can run preupg --riskcheck --verbose to view these risks.
+ Addressing high risk issues is required before the in-place upgrade
+ and ignoring these risks may result in a broken upgrade and unsupported upgrade.
+ Please backup your data.
+
+
+ List of issues:
+ INPLACERISK: HIGH: We detected some non-CentOS signed packages, you can find the list in /root/preupgrade/./kickstart/noncentospkgs. You need to handle them yourself!
+ INPLACERISK: HIGH: After upgrading to CentOS 7 there are still some el6 packages left. Add --cleanup-post option to redhat-upgrade-tool if you want to remove them automatically.
+ INPLACERISK: HIGH: There were changes in SELinux policies between CentOS 6 and CentOS 7. Please, check solution in order to resolve this issue.
+ INPLACERISK: HIGH: The service autofs on CentOS 7 is disabled by default. Enable them via commands: systemctl enable autofs && systemctl start autofs.service .
+ INPLACERISK: HIGH: The service blk-availability on CentOS 7 is disabled by default. Enable them via commands: systemctl enable blk-availability && systemctl start blk-availability.service .
+ INPLACERISK: HIGH: The service certmonger on CentOS 7 is disabled by default. Enable them via commands: systemctl enable certmonger && systemctl start certmonger.service .
+ INPLACERISK: HIGH: The service haldaemon on CentOS 7 is disabled by default. Enable them via commands: systemctl enable haldaemon && systemctl start haldaemon.service .
+ INPLACERISK: HIGH: The service httpd on CentOS 7 is disabled by default. Enable them via commands: systemctl enable httpd && systemctl start httpd.service .
+ INPLACERISK: HIGH: The service ip6tables on CentOS 7 is disabled by default. Enable them via commands: systemctl enable ip6tables && systemctl start ip6tables.service .
+ INPLACERISK: HIGH: The service mcelogd on CentOS 7 is disabled by default. Enable them via commands: systemctl enable mcelogd && systemctl start mcelogd.service .
+ INPLACERISK: HIGH: The service messagebus on CentOS 7 is disabled by default. Enable them via commands: systemctl enable messagebus && systemctl start messagebus.service .
+ INPLACERISK: HIGH: The service netfs on CentOS 7 is disabled by default. Enable them via commands: systemctl enable netfs && systemctl start netfs.service .
+ INPLACERISK: HIGH: The service network on CentOS 7 is disabled by default. Enable them via commands: systemctl enable network && systemctl start network.service .
+ INPLACERISK: HIGH: The service nfslock on CentOS 7 is disabled by default. Enable them via commands: systemctl enable nfslock && systemctl start nfslock.service .
+ INPLACERISK: HIGH: The service portreserve on CentOS 7 is disabled by default. Enable them via commands: systemctl enable portreserve && systemctl start portreserve.service .
+ INPLACERISK: HIGH: The service postfix on CentOS 7 is disabled by default. Enable them via commands: systemctl enable postfix && systemctl start postfix.service .
+ INPLACERISK: HIGH: The service rpcgssd on CentOS 7 is disabled by default. Enable them via commands: systemctl enable rpcgssd && systemctl start rpcgssd.service .
+ INPLACERISK: HIGH: The service udev-post on CentOS 7 is disabled by default. Enable them via commands: systemctl enable udev-post && systemctl start udev-post.service .
+ INPLACERISK: HIGH: libcgroup configuration files were customized ( /bin/cgclassify
+ INPLACERISK: MEDIUM: We detected some packages installed on the system were removed (obsoleted) between CentOS 6 and CentOS 7. This may break the functionality of the packages depending on them.
+ INPLACERISK: MEDIUM: We detected some packages installed on the system were removed between CentOS 6 and CentOS 7. This may break the functionality of the packages depending on them.
+ INPLACERISK: MEDIUM: Package libudev not provided by its replacement systemd-libs. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package ql2500-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package coreutils-libs not provided by its replacement coreutils. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package redhat-lsb-graphics not provided by its replacement redhat-lsb-desktop. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package ql2200-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package bfa-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package rt73usb-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package ql2100-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package rt61pci-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package ql2400-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: Package ql23xx-firmware not provided by its replacement linux-firmware. In-place upgrade might not work properly, will be finished by postupgrade script!
+ INPLACERISK: MEDIUM: having one of [nss-devel mdadm elfutils-libelf-devel libsss_idmap systemtap-devel sssd-krb5-common java-1.6.0-openjdk-devel redhat-menus audit libpciaccess systemtap-runtime libini_config java-1.6.0-openjdk systemtap-client libX11-common sssd-ldap elfutils-libelf libref_array libxcb libxcb-devel nss java-1.7.0-openjdk sssd-client sssd-ad sssd-proxy gtk2-devel mesa-libGL biosdevname libitm libdrm certmonger pixman mesa-dri-drivers libipa_hbac-python nss-tools tzdata audit-libs ca-certificates libbasicobjects elfutils-libs elfutils nss-sysinit nss-util-devel libipa_hbac sssd-common sssd-ipa audit-libs-devel pixman-devel nspr mcelog mesa-private-llvm java-1.7.0-openjdk-devel kpartx openscap mesa-libGLU systemtap xorg-x11-proto-devel nspr-devel openldap nss-util libX11 sssd-krb5 gtk2 elfutils-devel tzdata-java python-sssdconfig sssd-common-pac libX11-devel sssd] package installed breaks upgrade
+ INPLACERISK: MEDIUM:  We detected some soname bumps in the libraries installed on the system. This may break the functionality of some of your 3rd party applications. They may need rebuild. Please check their requirements.
+ INPLACERISK: MEDIUM:  We detected some .so libraries installed on the system were removed between CentOS 6 and CentOS 7. This may break the functionality of some of your 3rd party applications.
+ INPLACERISK: MEDIUM: The  name cups-lpd was changed on CentOS 7 to one of these services:  cups-lpd.socket cups-lpd@.service
+ INPLACERISK: MEDIUM: The service chargen-dgram is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service chargen-stream is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service daytime-dgram is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service daytime-stream is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service discard-dgram is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service discard-stream is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service echo-dgram is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service echo-stream is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service rsync is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service tcpmux-server is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service time-dgram is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service time-stream is not installed by CentOS signed packages and will not be automatically enabled after in-place upgrade.
+ INPLACERISK: MEDIUM: The service mongod is disabled and not installed by CentOS signed packages. It will be disabled after an in-place upgrade.
+ INPLACERISK: MEDIUM: The service redis is disabled and not installed by CentOS signed packages. It will be disabled after an in-place upgrade.
+ INPLACERISK: SLIGHT: We detected some files where modifications are not tracked in the rpms. You may need to check their functionality after successful upgrade.
+ INPLACERISK: SLIGHT: We detected some files untracked by rpms. Some of these may need manual check/migration after redhat-upgrade-tool and/or can cause conflicts or troubles during the installation. Try to reduce unnecessary untracked files before running redhat-upgrade-tool.
+ INPLACERISK: SLIGHT: We detected some packages installed on the system changed their name between CentOS 6 and CentOS 7. Although they should be compatible, monitoring after the update is recommended.
+ INPLACERISK: SLIGHT: export shell commands will be deleted from /etc/sysconfig/sshd
+ INPLACERISK: SLIGHT: Some binaries untracked by RPM were discovered on the system and may need rebuild after upgrade.
+ INPLACERISK: SLIGHT: Some scripts untracked by RPM were discovered on the system and may not work properly after upgrade.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/Compress/Raw/Bzip2.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Client.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Core.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Wc.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Delta.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Fs.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Repos.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Ra.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/IndexInfo.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Memoize/YAML.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Log.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Prompt.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/GlobSpec.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Utils.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Fetcher.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Editor.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Migration.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Ra.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/I18N.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Node.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Dumper.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Any.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Loader/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Tag.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Error.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Marshall.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Types.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Loader.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Dumper/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Test/YAML.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/Compress/Raw/Bzip2.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Client.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Core.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Wc.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Delta.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Fs.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Repos.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Ra.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/lib64/perl5/vendor_perl/SVN/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/IndexInfo.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Memoize/YAML.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Log.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Prompt.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/GlobSpec.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Utils.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Fetcher.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Editor.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Migration.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/SVN/Ra.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git/I18N.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Git.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Node.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Dumper.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Any.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Loader/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Tag.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Error.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Marshall.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Types.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Loader.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Dumper/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/YAML/Base.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: The perl module /usr/share/perl5/vendor_perl/Test/YAML.pm was not installed by any CentOS-signed package.
+ INPLACERISK: SLIGHT: /usr/lib64/python2.6/site-packages/gtk-2.0 is owned by an RPM package that was not signed by CentOS.
+ INPLACERISK: SLIGHT: /usr/lib64/python2.6/site-packages/libsvn is owned by an RPM package that was not signed by CentOS.
+ INPLACERISK: SLIGHT: /usr/lib64/python2.6/site-packages/report is not owned by any RPM package.
+ INPLACERISK: SLIGHT: /usr/lib64/python2.6/site-packages/reportclient is not owned by any RPM package.
+ INPLACERISK: SLIGHT: /usr/lib64/python2.6/site-packages/svn is owned by an RPM package that was not signed by CentOS.
+ Continue with the upgrade [Y/N]?  y
+ getting boot images...
+ vmlinuz-redhat-upgrade-tool                                                                                                   | 4.7 MB     01:28     
+ initramfs-redhat-upgrade-tool.img                                                                                             |  32 MB     07:45     
+ setting up update...
+ finding updates 25% [===============================                                                                                                ]cmdline-instrepo/filelists_db                                                                                                 | 5.8 MB     00:02     
+ epel/filelists_db                                                                                                             | 9.1 MB     00:04     
+ rpmforge/filelists_db                
+ rpmfusion-free-updates/filelists_db                                                                                           | 152 kB     00:03     
+ upg/filelists_db                                                                                                              | 130 kB     00:00     
+ finding updates 100% [==============================================================================================================================](1/1063): GConf2-3.2.6-8.el7.x86_64.rpm                                                                                       | 1.0 MB     00:16     
+ (2/1063): GConf2-devel-3.2.6-8.el7.x86_64.rpm                                                                                 | 110 kB     00:01     
+ (3/1063): NetworkManager-glib-0.9.9.1-13.git20140326.4dba720.el7.x86_64.rpm                                                   | 368 kB     00:06     
+ (4/1063): ORBit2-2.14.19-13.el7.x86_64.rpm                                                                                    | 176 kB     00:02     
+ (5/1063): ORBit2-devel-2.14.19-13.el7.x86_64.rpm                                                                              | 174 kB     00:02     
+ (6/1063): PackageKit-glib-0.8.9-11.el7.centos.x86_64.rpm                                                                      | 124 kB     00:02     
+ (7/1063): SDL-1.2.15-11.el7.x86_64.rpm                                                                                        | 204 kB     00:02     
+ (8/1063): abrt-2.1.11-12.el7.centos.x86_64.rpm                                                                                | 438 kB     00:09     
+ (9/1063): abrt-addon-ccpp-2.1.11-12.el7.centos.x86_64.rpm                                                                     | 178 kB     00:04     
+ (10/1063): abrt-addon-kerneloops-2.1.11-12.el7.centos.x86_64.rpm                                                              |  95 kB     00:01     
+ (11/1063): abrt-addon-pstoreoops-2.1.11-12.el7.centos.x86_64.rpm                                                              |  88 kB     00:03     
+ (12/1063): abrt-addon-python-2.1.11-12.el7.centos.x86_64.rpm                                                                  |  93 kB     00:01     
+ (13/1063): abrt-addon-vmcore-2.1.11-12.el7.centos.x86_64.rpm                                                                  |  97 kB     00:01     
+ (14/1063): abrt-addon-xorg-2.1.11-12.el7.centos.x86_64.rpm                                                                    |  88 kB     00:01     
+ (15/1063): abrt-cli-2.1.11-12.el7.centos.x86_64.rpm                                                                           |  79 kB     00:01     
+ (16/1063): abrt-libs-2.1.11-12.el7.centos.x86_64.rpm                                                                          |  97 kB     00:01     
+ (17/1063): abrt-python-2.1.11-12.el7.centos.x86_64.rpm                                                                        | 100 kB     00:02     
+ (18/1063): abrt-tui-2.1.11-12.el7.centos.x86_64.rpm                                                                           |  89 kB     00:01     
+ (19/1063): acl-2.2.51-12.el7.x86_64.rpm                                                                                       |  81 kB     00:02     
+ (20/1063): acpid-2.0.19-5.el7.x86_64.rpm                                                                                      |  66 kB     00:01     
+ (21/1063): agg-2.5-18.el7.x86_64.rpm                                                                                          | 145 kB     00:03     
+ (22/1063): aic94xx-firmware-30-6.el7.noarch.rpm                                                                               |  23 kB     00:00     
+ (23/1063): alsa-lib-1.0.27.2-3.el7.x86_64.rpm                                                                                 | 389 kB     00:06     
+ (24/1063): alsa-lib-devel-1.0.27.2-3.el7.x86_64.rpm                                                                           | 891 kB     00:16     
+ (25/1063): alsa-utils-1.0.27.2-5.el7.x86_64.rpm                                                                               | 1.0 MB     00:13     
+ (26/1063): apr-1.4.8-3.el7.x86_64.rpm                                                                                         | 103 kB     00:01     
+ (27/1063): apr-util-1.5.2-6.el7.x86_64.rpm                                                                                    |  92 kB     00:01     
+ (28/1063): apr-util-ldap-1.5.2-6.el7.x86_64.rpm                                                                               |  19 kB     00:00     
+ (29/1063): at-3.1.13-17.el7.x86_64.rpm                                                                                        |  50 kB     00:01     
+ (30/1063): at-spi2-atk-2.8.1-4.el7.x86_64.rpm                                                                                 |  73 kB     00:00     
+ (31/1063): at-spi2-atk-devel-2.8.1-4.el7.x86_64.rpm                                                                           |  10 kB     00:00     
+ (32/1063): at-spi2-core-2.8.0-6.el7.x86_64.rpm                                                                                | 151 kB     00:02     
+ (33/1063): atk-2.8.0-4.el7.x86_64.rpm            
+
+
+
+
+ 7、解决升级过程中的下载速度慢
+
+
+ 将上述命令中的地址，更换为 http://mirrors.yun-idc.com/centos/7/os/x86_64/ 速度快多了 :)
+
+
+
+
+8、升级完成重启
+ 安装完成
+
+
+9、升级中遇到的问题
+
+
+9.1、安装后重启很久才能重新启动成功
+
+
+ 至少需要10分钟才能登录系统，原因未知，后来发现系统日志服务未启动。一直未查明原因。
+
+
+9.2、首次进入系统，sshd等服务未启动；系统日志服务不可用
+
+
+ 发现缺少/usr/lib64/libsasl2.so.2 导致的不能启动，然后升级之后这文件没了，只好
+
+
+   通过 ln -s /usr/lib64/libsasl2.so.3 /usr/lib64/libsasl2.so.2
+    
+    
+    
+    上述两个服务都可以启动了
+
+
+
+
+
+
+# 手动开启
+systemctl start rsyslog start
+
+
+ systemctl enable rsys
+
+
+ 9.3、yum update 问题
+
+
+yum update 不能用，发现是python问题，原先centos6.5是2.6.6，系统后python升级2.7.5了，但还是要require2.6.6的库，升级程序没有搞好兼容怎么的
+
+
+
+
+
+
+ 原因; 升级前centos6.5用了6的epel库，现在升级到centos7后，yum还会找epel6的库依赖，结果一大堆错误。
+
+
+ 解决：disable epel6  禁用后即可用
+
+
+9.4、Protected multilib versions: mesa-libGL-9.2.5-6.20131218.el7_0.i686 != mesa-libGL-10.1.2-2.el6.x86_64
+
+
+
+
+原因：因为升级的原因，安装了两个版本的mesa-libGL
+
+
+解决： 
+查找相同的软件包
+rpm -aq | grep mesa-libGL
+ mesa-libGL-devel-9.2.5-5.20131218.el7.x86_64
+ mesa-libGL-10.1.2-2.el6.x86_64
+ mesa-libGL-9.2.5-5.20131218.el7.i686
+ mesa-libGLU-10.1.2-2.el6.x86_64
+
+
+删除 低版本的
+
+
+yum remove mesa-libGL-devel-9.2.5-5.20131218.el7.x86_64 mesa-libGL-9.2.5-5.20131218.el7.i686
+ Loaded plugins: fastestmirror
+ Resolving Dependencies
+ --> Running transaction check
+ ---> Package mesa-libGL.i686 0:9.2.5-5.20131218.el7 will be erased
+ ---> Package mesa-libGL-devel.x86_64 0:9.2.5-5.20131218.el7 will be erased
+ --> Processing Dependency: pkgconfig(gl) for package: cairo-devel-1.12.14-6.el7.x86_64
+ --> Running transaction check
+ ---> Package cairo-devel.x86_64 0:1.12.14-6.el7 will be erased
+ --> Processing Dependency: cairo-devel = 1.12.14-6.el7 for package: cairo-gobject-devel-1.12.14-6.el7.x86_64
+ --> Processing Dependency: cairo-devel >= 1.7.6 for package: pango-devel-1.34.1-5.el7.x86_64
+ --> Processing Dependency: cairo-devel for package: pycairo-devel-1.8.10-8.el7.x86_64
+ --> Processing Dependency: cairo-devel >= 1.6.0-1 for package: gtk2-devel-2.24.23-6.el6.x86_64
+ --> Processing Dependency: pkgconfig(cairo) for package: gtk3-devel-3.8.8-5.el7.x86_64
+ --> Processing Dependency: pkgconfig(cairo) for package: librsvg2-devel-2.39.0-1.el7.x86_64
+ --> Processing Dependency: pkgconfig(cairo) for package: pycairo-devel-1.8.10-8.el7.x86_64
+ --> Processing Dependency: pkgconfig(cairo) for package: gtk2-devel-2.24.23-6.el6.x86_64
+ --> Processing Dependency: pkgconfig(cairo) for package: cairo-gobject-devel-1.12.14-6.el7.x86_64
+ --> Processing Dependency: pkgconfig(cairo) for package: pango-devel-1.34.1-5.el7.x86_64
+ --> Processing Dependency: pkgconfig(cairo-xlib) for package: gtk3-devel-3.8.8-5.el7.x86_64
+ --> Running transaction check
+ ---> Package cairo-gobject-devel.x86_64 0:1.12.14-6.el7 will be erased
+ ---> Package gtk2-devel.x86_64 0:2.24.23-6.el6 will be erased
+ --> Processing Dependency: pkgconfig(gail) for package: libgnomecanvas-devel-2.30.3-8.el7.x86_64
+ --> Processing Dependency: pkgconfig(gdk-2.0) for package: libcanberra-devel-0.30-5.el7.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-2.0) for package: libcanberra-devel-0.30-5.el7.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-2.0) for package: libgnomecanvas-devel-2.30.3-8.el7.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-2.0) for package: gnome-desktop-devel-2.28.2-11.el6.centos.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-2.0) for package: libglade2-devel-2.6.4-11.el7.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-2.0) for package: pygtk2-devel-2.24.0-9.el7.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-2.0) for package: libgnomeui-devel-2.24.5-8.el7.x86_64
+ --> Processing Dependency: gtk2-devel >= 2.6.0 for package: libbonoboui-devel-2.24.5-7.el7.x86_64
+ --> Processing Dependency: gtk2-devel >= 2.11.3 for package: gnome-desktop-devel-2.28.2-11.el6.centos.x86_64
+ --> Processing Dependency: gtk2-devel for package: libcanberra-devel-0.30-5.el7.x86_64
+ ---> Package gtk3-devel.x86_64 0:3.8.8-5.el7 will be erased
+ --> Processing Dependency: pkgconfig(gtk+-3.0) for package: gcr-devel-3.8.2-4.el7.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-3.0) for package: gnome-online-accounts-devel-3.8.5-8.el7.x86_64
+ --> Processing Dependency: pkgconfig(gtk+-3.0) for package: libgweather-devel-3.8.2-4.el7.x86_64
+ ---> Package librsvg2-devel.x86_64 0:2.39.0-1.el7 will be erased
+ ---> Package pango-devel.x86_64 0:1.34.1-5.el7 will be erased
+ ---> Package pycairo-devel.x86_64 0:1.8.10-8.el7 will be erased
+ --> Running transaction check
+ ---> Package gcr-devel.x86_64 0:3.8.2-4.el7 will be erased
+ --> Processing Dependency: pkgconfig(gcr-base-3) for package: libgdata-devel-0.13.3-4.el7.x86_64
+ ---> Package gnome-desktop-devel.x86_64 0:2.28.2-11.el6.centos will be erased
+ ---> Package gnome-online-accounts-devel.x86_64 0:3.8.5-8.el7 will be erased
+ --> Processing Dependency: gnome-online-accounts-devel for package: evolution-data-server-devel-3.8.5-23.el7.x86_64
+ ---> Package libbonoboui-devel.x86_64 0:2.24.5-7.el7 will be erased
+ ---> Package libcanberra-devel.x86_64 0:0.30-5.el7 will be erased
+ --> Processing Dependency: pkgconfig(libcanberra) >= 0 for package: libgnome-devel-2.32.1-9.el7.x86_64
+ ---> Package libglade2-devel.x86_64 0:2.6.4-11.el7 will be erased
+ ---> Package libgnomecanvas-devel.x86_64 0:2.30.3-8.el7 will be erased
+ ---> Package libgnomeui-devel.x86_64 0:2.24.5-8.el7 will be erased
+ ---> Package libgweather-devel.x86_64 0:3.8.2-4.el7 will be erased
+ ---> Package pygtk2-devel.x86_64 0:2.24.0-9.el7 will be erased
+ --> Running transaction check
+ ---> Package evolution-data-server-devel.x86_64 0:3.8.5-23.el7 will be erased
+ ---> Package libgdata-devel.x86_64 0:0.13.3-4.el7 will be erased
+ ---> Package libgnome-devel.x86_64 0:2.32.1-9.el7 will be erased
+ --> Finished Dependency Resolution
+
+
+ Dependencies Resolved
+
+
+ =====================================================================================================================================================
+  Package                                Arch              Version                          Repository                                           Size
+ =====================================================================================================================================================
+ Removing:
+  mesa-libGL                             i686              9.2.5-5.20131218.el7             installed                                           529 k
+  mesa-libGL-devel                       x86_64            9.2.5-5.20131218.el7             installed                                           1.0 M
+ Removing for dependencies:
+  cairo-devel                            x86_64            1.12.14-6.el7                    installed                                           3.6 M
+  cairo-gobject-devel                    x86_64            1.12.14-6.el7                    installed                                           6.4 k
+  evolution-data-server-devel            x86_64            3.8.5-23.el7                     installed                                           2.1 M
+  gcr-devel                              x86_64            3.8.2-4.el7                      installed                                           3.0 M
+  gnome-desktop-devel                    x86_64            2.28.2-11.el6.centos             @anaconda-CentOS-201311272149.x86_64/6.5            409 k
+  gnome-online-accounts-devel            x86_64            3.8.5-8.el7                      installed                                           2.4 M
+  gtk2-devel                             x86_64            2.24.23-6.el6                    @base/6                                              15 M
+  gtk3-devel                             x86_64            3.8.8-5.el7                      installed                                            24 M
+  libbonoboui-devel                      x86_64            2.24.5-7.el7                     installed                                           1.2 M
+  libcanberra-devel                      x86_64            0.30-5.el7                       installed                                           145 k
+  libgdata-devel                         x86_64            0.13.3-4.el7                     installed                                           7.2 M
+  libglade2-devel                        x86_64            2.6.4-11.el7                     installed                                           231 k
+  libgnome-devel                         x86_64            2.32.1-9.el7                     installed                                           568 k
+  libgnomecanvas-devel                   x86_64            2.30.3-8.el7                     installed                                           596 k
+  libgnomeui-devel                       x86_64            2.24.5-8.el7                     installed                                           2.8 M
+  libgweather-devel                      x86_64            3.8.2-4.el7                      installed                                           439 k
+  librsvg2-devel                         x86_64            2.39.0-1.el7                     installed                                           249 k
+  pango-devel                            x86_64            1.34.1-5.el7                     installed                                           3.0 M
+  pycairo-devel                          x86_64            1.8.10-8.el7                     installed                                           7.4 k
+  pygtk2-devel                           x86_64            2.24.0-9.el7                     installed                                           1.1 M
+
+
+ Transaction Summary
+ =====================================================================================================================================================
+ Remove  2 Packages (+20 Dependent packages)
+
+
+ Installed size: 70 M
+ Is this ok [y/N]: y
+ Downloading packages:
+ Running transaction check
+ Running transaction test
+ Transaction test succeeded
+ Running transaction
+   Erasing    : gnome-desktop-devel-2.28.2-11.el6.centos.x86_64                                                                                  1/22 
+   Erasing    : libgnomeui-devel-2.24.5-8.el7.x86_64                                                                                             2/22 
+   Erasing    : evolution-data-server-devel-3.8.5-23.el7.x86_64                                                                                  3/22 
+   Erasing    : libgdata-devel-0.13.3-4.el7.x86_64                                                                                               4/22 
+   Erasing    : pygtk2-devel-2.24.0-9.el7.x86_64                                                                                                 5/22 
+   Erasing    : pycairo-devel-1.8.10-8.el7.x86_64                                                                                                6/22 
+   Erasing    : gcr-devel-3.8.2-4.el7.x86_64                                                                                                     7/22 
+   Erasing    : gnome-online-accounts-devel-3.8.5-8.el7.x86_64                                                                                   8/22 
+   Erasing    : libgweather-devel-3.8.2-4.el7.x86_64                                                                                             9/22 
+   Erasing    : librsvg2-devel-2.39.0-1.el7.x86_64                                                                                              10/22 
+   Erasing    : libbonoboui-devel-2.24.5-7.el7.x86_64                                                                                           11/22 
+   Erasing    : libgnomecanvas-devel-2.30.3-8.el7.x86_64                                                                                        12/22 
+   Erasing    : libglade2-devel-2.6.4-11.el7.x86_64                                                                                             13/22 
+   Erasing    : libgnome-devel-2.32.1-9.el7.x86_64                                                                                              14/22 
+   Erasing    : libcanberra-devel-0.30-5.el7.x86_64                                                                                             15/22 
+   Erasing    : gtk2-devel-2.24.23-6.el6.x86_64                                                                                                 16/22 
+   Erasing    : gtk3-devel-3.8.8-5.el7.x86_64                                                                                                   17/22 
+   Erasing    : cairo-gobject-devel-1.12.14-6.el7.x86_64                                                                                        18/22 
+   Erasing    : pango-devel-1.34.1-5.el7.x86_64                                                                                                 19/22 
+   Erasing    : cairo-devel-1.12.14-6.el7.x86_64                                                                                                20/22 
+   Erasing    : mesa-libGL-devel-9.2.5-5.20131218.el7.x86_64                                                                                    21/22 
+   Erasing    : mesa-libGL-9.2.5-5.20131218.el7.i686                                                                                            22/22 
+ warning: file /usr/share/doc/mesa-libGL-9.2.5/COPYING: remove failed: No such file or directory
+   Verifying  : libgweather-devel-3.8.2-4.el7.x86_64                                                                                             1/22 
+   Verifying  : pango-devel-1.34.1-5.el7.x86_64                                                                                                  2/22 
+   Verifying  : cairo-devel-1.12.14-6.el7.x86_64                                                                                                 3/22 
+   Verifying  : gnome-online-accounts-devel-3.8.5-8.el7.x86_64                                                                                   4/22 
+   Verifying  : pycairo-devel-1.8.10-8.el7.x86_64                                                                                                5/22 
+   Verifying  : librsvg2-devel-2.39.0-1.el7.x86_64                                                                                               6/22 
+   Verifying  : libgdata-devel-0.13.3-4.el7.x86_64                                                                                               7/22 
+   Verifying  : libgnomecanvas-devel-2.30.3-8.el7.x86_64                                                                                         8/22 
+   Verifying  : libcanberra-devel-0.30-5.el7.x86_64                                                                                              9/22 
+   Verifying  : cairo-gobject-devel-1.12.14-6.el7.x86_64                                                                                        10/22 
+   Verifying  : gcr-devel-3.8.2-4.el7.x86_64                                                                                                    11/22 
+   Verifying  : pygtk2-devel-2.24.0-9.el7.x86_64                                                                                                12/22 
+   Verifying  : libglade2-devel-2.6.4-11.el7.x86_64                                                                                             13/22 
+   Verifying  : mesa-libGL-9.2.5-5.20131218.el7.i686                                                                                            14/22 
+   Verifying  : gtk3-devel-3.8.8-5.el7.x86_64                                                                                                   15/22 
+   Verifying  : libbonoboui-devel-2.24.5-7.el7.x86_64                                                                                           16/22 
+   Verifying  : libgnome-devel-2.32.1-9.el7.x86_64                                                                                              17/22 
+   Verifying  : mesa-libGL-devel-9.2.5-5.20131218.el7.x86_64                                                                                    18/22 
+   Verifying  : libgnomeui-devel-2.24.5-8.el7.x86_64                                                                                            19/22 
+   Verifying  : evolution-data-server-devel-3.8.5-23.el7.x86_64                                                                                 20/22 
+   Verifying  : gnome-desktop-devel-2.28.2-11.el6.centos.x86_64                                                                                 21/22 
+   Verifying  : gtk2-devel-2.24.23-6.el6.x86_64                                                                                                 22/22 
+
+
+ Removed:
+   mesa-libGL.i686 0:9.2.5-5.20131218.el7                                mesa-libGL-devel.x86_64 0:9.2.5-5.20131218.el7                               
+
+
+ Dependency Removed:
+   cairo-devel.x86_64 0:1.12.14-6.el7        cairo-gobject-devel.x86_64 0:1.12.14-6.el7           evolution-data-server-devel.x86_64 0:3.8.5-23.el7   
+   gcr-devel.x86_64 0:3.8.2-4.el7            gnome-desktop-devel.x86_64 0:2.28.2-11.el6.centos    gnome-online-accounts-devel.x86_64 0:3.8.5-8.el7    
+   gtk2-devel.x86_64 0:2.24.23-6.el6         gtk3-devel.x86_64 0:3.8.8-5.el7                      libbonoboui-devel.x86_64 0:2.24.5-7.el7             
+   libcanberra-devel.x86_64 0:0.30-5.el7     libgdata-devel.x86_64 0:0.13.3-4.el7                 libglade2-devel.x86_64 0:2.6.4-11.el7               
+   libgnome-devel.x86_64 0:2.32.1-9.el7      libgnomecanvas-devel.x86_64 0:2.30.3-8.el7           libgnomeui-devel.x86_64 0:2.24.5-8.el7              
+   libgweather-devel.x86_64 0:3.8.2-4.el7    librsvg2-devel.x86_64 0:2.39.0-1.el7                 pango-devel.x86_64 0:1.34.1-5.el7                   
+   pycairo-devel.x86_64 0:1.8.10-8.el7       pygtk2-devel.x86_64 0:2.24.0-9.el7                  
+
+
+ Complete!
+
+
+
+
+然后 yum update 就可以成功运行了：）
+
+
+
+
+yum remove mod_perl-2.0.4-11.el6_5.x86_64
+
+
+
+
+
+
+
+
+ Transaction check error:
+   file /usr/lib64/audit from install of glibc-2.17-55.el7_0.5.x86_64 conflicts with file from package audit-2.3.7-5.el6.x86_64
+   file /usr/lib64/libglapi.so.0.0.0 from install of mesa-libglapi-9.2.5-6.20131218.el7_0.x86_64 conflicts with file from package mesa-dri-drivers-10.1.2-2.el6.x86_64
+
+
+
+
+ yum remove audit-2.3.7-5.el6.x86_64
+
+
+ yum remove mesa-dri-drivers-10.1.2-2.el6.x86_64
+
+
+
+
+ Removed:
+   mesa-dri-drivers.x86_64 0:10.1.2-2.el6                                                                                                             
+
+
+ Dependency Removed:
+   cairo.x86_64 0:1.12.14-6.el7                     cairo-gobject.x86_64 0:1.12.14-6.el7            cups.x86_64 1:1.6.3-14.el7                      
+   cups-filesystem.noarch 1:1.6.3-14.el7            cups-filters.x86_64 0:1.0.35-15.el7             evolution-data-server.x86_64 0:3.8.5-23.el7     
+   foomatic.x86_64 0:4.0.9-6.el7                    foomatic-db.noarch 0:4.0-40.20130911.el7        foomatic-db-ppds.noarch 0:4.0-40.20130911.el7   
+   gcr.x86_64 0:3.8.2-4.el7                         ghostscript-cups.x86_64 0:9.07-16.el7           gnome-desktop.x86_64 0:2.28.2-11.el6.centos     
+   gnome-disk-utility.x86_64 0:3.8.2-5.el7          gnome-keyring.x86_64 0:3.8.2-8.el7              gnome-online-accounts.x86_64 0:3.8.5-8.el7      
+   gnome-python2.x86_64 0:2.28.1-14.el7             gnome-python2-bonobo.x86_64 0:2.28.1-14.el7     gnome-python2-canvas.x86_64 0:2.28.1-14.el7     
+   gnome-python2-gnome.x86_64 0:2.28.1-14.el7       gnome-python2-gnomevfs.x86_64 0:2.28.1-14.el7   gnome-themes.noarch 0:2.28.1-6.el6              
+   gnome-vfs2.x86_64 0:2.24.4-14.el7                gnome-vfs2-devel.x86_64 0:2.24.4-14.el7         gstreamer-plugins-base.x86_64 0:0.10.36-10.el7  
+   gstreamer-plugins-good.x86_64 0:0.10.31-11.el7   gstreamer1-plugins-base.x86_64 0:1.0.7-5.el7    gtk2.x86_64 0:2.24.23-6.el6                     
+   gtk2-engines.x86_64 0:2.18.4-5.el6.centos        gtk3.x86_64 0:3.8.8-5.el7                       gvfs.x86_64 0:1.16.4-7.el7                      
+   gvfs-afp.x86_64 0:1.16.4-7.el7                   gvfs-devel.x86_64 0:1.16.4-7.el7                harfbuzz-devel.x86_64 0:0.9.20-3.el7            
+   latencytop.x86_64 0:0.5-13.el7                   libbonoboui.x86_64 0:2.24.5-7.el7               libcanberra-gtk2.x86_64 0:0.30-5.el7            
+   libcanberra-gtk3.x86_64 0:0.30-5.el7             libgcj.x86_64 0:4.4.7-11.el6                    libgdata.x86_64 0:0.13.3-4.el7                  
+   libglade2.x86_64 0:2.6.4-11.el7                  libgnome.x86_64 0:2.32.1-9.el7                  libgnomecanvas.x86_64 0:2.30.3-8.el7            
+   libgnomeui.x86_64 0:2.24.5-8.el7                 libgweather.x86_64 0:3.8.2-4.el7                librsvg2.x86_64 0:2.39.0-1.el7                  
+   libwnck.x86_64 0:2.28.0-3.el6                    mesa-dri1-drivers.x86_64 0:7.11-8.el6           mesa-libGL.x86_64 0:10.1.2-2.el6                
+   mesa-libGLU.x86_64 0:10.1.2-2.el6                pango.x86_64 0:1.34.1-5.el7                     phonon.x86_64 0:4.6.0-9.el7                     
+   phonon-backend-gstreamer.x86_64 2:4.6.3-3.el7    poppler-utils.x86_64 0:0.22.5-6.el7             pycairo.x86_64 0:1.8.10-8.el7                   
+   pygtk2.x86_64 0:2.24.0-9.el7                     python-matplotlib.x86_64 0:1.2.0-15.el7         qt-qdbusviewer.x86_64 1:4.8.5-8.el7             
+   qt-x11.x86_64 1:4.8.5-8.el7                      redhat-lsb.x86_64 0:4.1-24.el7                  redhat-lsb-core.x86_64 0:4.1-24.el7             
+   redhat-lsb-cxx.x86_64 0:4.1-24.el7               redhat-lsb-desktop.x86_64 0:4.1-24.el7          redhat-lsb-languages.x86_64 0:4.1-24.el7        
+   redhat-lsb-printing.x86_64 0:4.1-24.el7          seekwatcher.noarch 0:0.12-5.el6                 system-gnome-theme.noarch 0:60.0.2-1.el6        
+   system-icon-theme.noarch 0:6.0.0-2.el6           webkitgtk3.x86_64 0:2.0.4-6.el7                
+
+

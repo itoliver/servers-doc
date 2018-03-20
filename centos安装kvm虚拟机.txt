@@ -1,0 +1,192 @@
+在2010年4月发布的RHEL6.0版本中，去掉了XEN,这也许是第一个不包含Xen Hypervisor的知名linux发行版。KVM是指基于Linux内核的虚拟机（Kernel-base Virtual Machine），增加到Linux内核是Linux发展的一个重要里程碑，这也是第一个整合到Linux主线内核的虚拟化技术。在KVM模型中，每一个虚拟机都是一个由Linux调度程序管理的标准进程，你可以在用户空间启动客户机操作系统，一个普通的Linux进程有两种运行模式：内核和用户，KVM增加了第三种模式：客户模式（有自己的内核和用户模式）。 
+
+1 KVM虚拟机的管理工具
+ 准确的来说，KVM仅仅是Linux内核的一个模块，管理和创建完整的KVM虚拟机，需要更多的辅助工具。
+QEMU-KVM：在Linux系统中，首先我们可以用modprobe命令加载KVM模块，如果用RPM安装KVM软件包，系统会在启动时自动加载模块，QEMU是一个强大的虚拟软件，它可以虚拟不同的构架。
+Virt-manager：尽管QEMU-KVM工具可以创建和管理KVM虚拟机，RedHat为KVM开发了更多的辅助工具，比如 libvirt libguestfs等，原因是QEMU工具效率不高，不易于使用。 
+
+2 安装配置KVM相关软件
+2.1系统要求：
+ 处理器需求：需要一台可以运行最新linux内核的Intel处理器（含VT虚拟化技术）或AMD处理器（含SVM安全虚拟机技术的AMD处理器，也叫AMD-V）
+[root@vfeelit ~]# cat /etc/redhat-release
+ CentOS release 6.4 (Final)
+ 2.2检查CPU：
+[root@vfeelit ~]# egrep ‘vmx|svm’ /proc/cpuinfo
+如果输出的结果包含VMX，它是Intel处理器虚拟机技术标志：如果包含SVM，它是AMD处理器虚拟机技术的标志，如果你什么都没有得到，那应你的系统并没有支持虚拟化的处理，不能使用KVM，另处linux发行版本必须在64bit环境中才能使用KVM。 
+
+3 更新系统
+yum update
+ yum upgrade 
+
+4 安装KVM 
+[root@vfeelit ~]#yum -y install kvm python-virtinst libvirt  bridge-utils virt-manager qemu-kvm-tools  virt-viewer  virt-v2v
+ [root@vfeelit ~]#vi /etc/sysconfig/selinux
+ SELINUX=disabled
+ [root@vfeelit ~]#reboot
+
+5 重启后确认libvirtd是否正常启动 
+[root@vfeelit ~]# /etc/init.d/libvirtd restart
+正在关闭 libvirtd 守护进程：                               [确定]
+启动 libvirtd 守护进程：2013-05-19 03:12:52.694+0000: 3070: info : libvirt version: 0.10.2, package: 18.el6_4.5 (CentOS BuildSystem , 2013-05-16-14:53:18, c6b7.bsys.dev.centos.org)
+ 2013-05-19 03:12:52.694+0000: 3070: warning : virGetHostname:2265 : getaddrinfo failed for 'vfeelit': 未知的名称或服务
+                                                        [确定]
+
+6 检查KVM是否加载成功
+ 显示结果如下表示kvm模块已经加载，如果没有输出信息，则表示没有加载成功： 
+[root@vfeelit ~]#  lsmod | grep kvm
+ kvm_intel              53484  0
+ kvm                   316506  1 kvm_intel
+
+7 检查KVM是否成功安装 
+[root@vfeelit ~]# virsh list --all  ##--all关闭的也会显示
+ Id    名称                         状态
+----------------------------------------------------
+
+8 各版本查询 
+[root@vfeelit ~]# kvm --version
+ bash: kvm: command not found
+ [root@vfeelit ~]# virt-install --version
+ 0.600.0
+ [root@vfeelit ~]# virsh --version
+ 0.10.2
+
+9 修改qemu.conf配置 
+[root@vfeelit ~]# vi /etc/libvirt/qemu.conf
+ vnc_listen = "0.0.0.0"修改vnc监听端口
+
+二 配置网络桥接
+ 参考：http://www.techotopia.com/index.php/Creating_an_RHEL_6_KVM_Networked_Bridge_Interface 
+
+1 安装tunctl： 
+yum install -y tunctl
+
+2 禁用网络管理器： 
+chkconfig NetworkManager off  ##和桥接有冲突，要关闭
+service NetworkManager stop
+
+3 修改eth0为物理网口，br0为桥接网口配置文件: 
+[root@vfeelit network-scripts]# cat ifcfg-br0
+ DEVICE=br0
+ TYPE=Bridge
+ BOOTPROTO=static
+ IPV6INIT=no
+ ONBOOT=yes
+ IPADDR=192.168.1.66
+ NETMASK=255.255.255.0
+ GATEWAY=192.168.1.1
+ DNS1=8.8.8.8
+ DELAY=0
+ [root@vfeelit network-scripts]# cat ifcfg-eth0
+ DEVICE=eth0
+ TYPE=Ethernet
+ BRIDGE=br0
+ BOOTPROTO=none
+ IPV6INIT=no
+ ONBOOT=yes
+
+附加说明：这里配置成桥接方式，实际上本机的数据包发送是通过br0发送的，br0的TYPE是Bridge,其它的信息跟配置一个物理网卡一样，本机的eth0通过桥接到br0（通过BRIDGE指定）进行通信，它根本不需要配置IP信息，实际上数据发送还是通过本机的物理网卡。 
+
+4 最后重启网络 
+[root@vfeelit network-scripts]# service network restart
+
+5 查看桥接网络 
+[root@vfeelit ~]# brctl show
+ bridge name     bridge id               STP enabled     interfaces
+ br0             8000.0021cc6b6f2c       no              eth0
+ virbr0          8000.525400ac7ebe       yes             virbr0-nic
+
+接口eth0通过br0进行桥接。birbr0-nic通过virbr0进行桥接，这个是默认的设置，当使用NAT时使用。 
+
+三 使用virt-install 工具安装guest 系统 
+[root@vfeelit /]# virt-install --name=centos64 --ram 1024 --vcpus=2 --disk path=/var/lib/libvirt/images/centos64.img,size=10 --accelerate --cdrom /mnt/CentOS64.iso --graphics vnc,password=123456,port=5920 --network bridge=br0 --force --autostart
+
+使用virt-install 工具，工具自动创建磁盘，默认是raw格式。 
+[root@vfeelit]# qemu-img info centos.img
+ image: centos.img
+ file format: raw
+ virtual size: 10G (10737418240 bytes)
+ disk size: 1.4G
+
+1 可以通过virt-viewer查看安装状态： 
+[root@vfeelit virtual]# virt-viewer name
+
+2 使用virt-install 工具安装虚拟机后，在目录/etc/libvirt/qemu/下生成xml 配置文件。 
+[root@vfeelit ~]# cd /etc/libvirt/qemu
+ [root@vfeelit ~]# cat centos64.xml
+ <domain type='kvm'>                                        虚拟机类型
+    <name>centos</name>                                    虚拟机名称
+    <uuid>54da30ed-150d-514e-9803-4dc01bd50488</uuid>      uuid唯一标示
+    <memory unit='KiB'>1048576</memory>                    指定虚拟机内存大小，给出了单位
+    <vcpu placement='static'>2</vcpu>                      虚拟机占用虚拟cpu个数，这里指物理cpu的核心数量
+    <os>
+       <type arch='x86_64' machine='rhel6.3.0'>hvm</type>   指定虚拟系统架构
+      <boot dev='hd'/>                                     启动类型，从硬盘启动
+    </os>
+     <devices>
+       <emulator>/usr/libexec/qemu-kvm</emulator>           驱动程序，同上，使用的是qemu-kvm
+       <disk type='file' device='disk'>                     指定磁盘类型
+      <driver name='qemu' type='raw' cache='none'/>        指定磁盘格式，这里是raw，也支持qcow2.
+       <source file='/home/vms/centos.img'/>                img文件路径
+      <target dev='hda' bus='ide'/>                        磁盘文件标示，驱动类型
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+       <interface type='bridge'>
+         <mac address='52:54:00:11:57:e6'/>                 自动生成，可以手动指定。
+        <source bridge='br0'/>                             桥接到哪一个接口
+      </interface>
+     </devices>
+ </domain>
+
+3 使用virsh工具管理生成的虚拟机 
+[root@vfeelit ~]# virsh start centos64            启动虚拟机 reboot  start  shutdown
+ [root@vfeelit ~]# virsh list                      列出当前运行的虚拟机
+Id    Name                           State
+ ----------------------------------------------------
+ 1     centos64                       running
+ [root@vfeelit ~]# ll  /var/lib/libvirt/qemu
+ total 12
+ srwxr-xr-x 1 root root    0 Aug 22 09:53 centos.monitor  ##这里的文件，是libvirtd在重启后，虚拟机也随着自动重启。
+ 动态查询kvm资源占用情况，每一台VM，对应一个qemu-kvm进程
+[root@vfeelit ~]# top -d 1 | grep kvm
+
+4 截取的kvm进程信息
+[root@vfeelit ~]# ps -aux | grep kvm 
+
+其他问题
+1、图形化配置：从菜单中启动，或者运行virt-manager进入图形管理界面，比较简单，不过img的位置需要注意一下，kvm安装后会有一个默认位置，不注意的话容易占满空间。或者直接硬盘分区时单独给/var分一个区。
+2、虚拟机重新配置：
+ 虚拟机的配置文件保存在/etc/libvirt/qemu目录下，扩展名是xml。修改相应的文件即可重新配置虚拟机。
+3、虚拟机备份及恢复：
+ 备份：拷贝/etc/libvirt/qemu目录下的xml配置文件，以及xml中设置的img文件。
+ 恢复：进入virsh，执行define 目录下的xml文件路径
+virsh # define /etc/libvirt/qemu/winxp.xml
+ 4、开机自动启动虚拟机：
+[root@vfeelit qemu]# virsh autostart Winxp
+ 5、克隆KVM虚拟机：
+[root@vfeelit ~]# virt-clone -o Winxp -n winxpclong -f /var/lib/libvirt/images/winxpclong.img
+（-o 原始客体的名称，-n新客户端的名称，-f作为新客户端磁盘映像的新文件）
+6、虚拟机意外关机报下述错误：
+[root@vfeelit qemu]# virsh start winxp
+错误：开始域 winxp 失败
+ 错误：Unable to read from monitor: Connection reset by peer
+解决方法：virsh managedsave-remove winxp 
+
+Virsh语法参考： 
+Autostart                         自动开始一个域
+Create                            从一个 XML 文件创建一个域
+Define                            从一个 XML 文件定义（但不开始）一个域
+edit                              编辑某个域的 XML 配置
+shutdown                          关闭一个域
+start                             开始一个（以前定义的）非活跃的域
+reboot                            重新启动一个域
+suspend                           挂起一个域
+resume                            重新恢复一个域
+vncdisplay                        vnc 显示
+
+使用save来备份当前虚拟机的状态：
+[root@vfeelit images]# virsh save –bypass-cache RedHat /var/lib/libvirt/images/test.img –running
+上面这个命令将RedHat的当前状态保存到/opt/vm2_save文件中。–running参数表示下次restore回来的时候能够自动启动RedHat。
+ 这个命令会导致RedHat被关闭。 
+
+现在还原：必须先关闭虚拟机
+[root@vfeelit images]# virsh shutdown RedHat
+ [root@vfeelit images]# virsh restore /var/lib/libvirt/images/test.img –bypass-cache –running （还原时不要指定虚拟机名称） 

@@ -1,0 +1,35 @@
+yum install percona-xtrabackup-x-x.rpm -y
+
+创建备份数据库用户和授权
+mariadb[mysql] > grant relad,lock tables,replication client on *.* to 'bakupuser'@'localhost' identified by 'bakuppass';
+flush privileges;
+
+完全备份
+
+innobackupex --user=bakupuser --password=bakuppass /data/backup/
+
+tips:vim /etc/my.cnf在[mysqld]中添加 innodb_log_file_size=5M
+
+error:log file ./ib_logfile0 is of different size 5.....bytes
+
+增量备份
+
+每个InnoDB的页面都会包含一个LSN信息，每当相关的数据发生改变，相关的页面的LSN就会自动增长。这正是InnoDB表可以进行增量备份的基础，即innobackupex通过备份上次完全备份之后发生改变的页面来实现
+innobackupex命令会在备份目录中创建一个新的以时间命名的目录以存放所有的增量备份数据。另外，在执行过增量备份之后再一次进行增量备份时，其–incremental-basedir应该指向上一次的增量备份所在的目录
+注：增量备份仅能应用于InnoDB或XtraDB表，对于MyISAM表而言，执行增量备份时其实进行的是完全备份
+
+添加数据
+mariada [test] > create table tb2(id int);
+mariadb [test] > insert into tb2 values (1),(2);
+
+做增量备份
+innobackupex --incremental /data/backup/ --incremental-basedir=/data/backup/2016-03-24_15-25-00/
+
+再次添加数据
+
+再做增量备份
+innobackupex --incremental /data/backup/ --incremental-basedir=/data/backup/2016-03-24_15-26-00/
+
+
+
+恢复数据

@@ -1,0 +1,74 @@
+selinux有三种模式，用getenforce获取，永久修改配置，vim /etc/selinux/config
+    Enforcing、Permissive 和 Disabled
+
+Enforcing 强制模式，代表记录警告且阻止可疑行为。
+Permissive 宽容模式，代表仅记录安全警告但不阻止可疑行为
+Disabled 关闭selinux
+
+selinux的运行策略selinuxtype有两种 targeted 和 mls
+
+targeted代表仅针对预制的几种网络服务和访问请求使用 SELinux 保护
+mls代表所有网络服务和请求都使用selinux保护
+
+若是想自己编辑 SELinux 策略，也提供了命令行下的策略编辑器 seedit 以及 Eclipse 下的编辑插件 eclipse-slide 。
+
+用ls -Z可以获取selinux的上下文
+
+
+
+
+
+修改vsftp配置
+
+vi /etc/vsftpd/vsftpd.conf
+
+ # directory. If chroot_local_user is YES, then this list becomes a list of
+ # users to NOT chroot().
+ chroot_local_user=YES   #去处注释，第96行
+ #chroot_list_enable=YES
+ # (default follows)
+
+
+解决办法有两个：
+
+1. 降低SELinux安全级别，把enforcing降低到permissive
+
+vi /etc/sysconfig/selinux
+
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#       enforcing - SELinux security policy is enforced.
+#       permissive - SELinux prints warnings instead of enforcing.
+#       disabled - SELinux is fully disabled.
+SELINUX=permissive	#修改都宽容模式
+
+
+这时FTP的登录功能就正常了。但降低整体系统安全
+
+2. 另一个更理想的办法。首先查看SELinux中有关FTP的设置状态：
+
+getsebool -a|grep ftp
+
+allow_ftpd_anon_write --> off
+allow_ftpd_full_access --> off
+allow_ftpd_use_cifs --> off
+allow_ftpd_use_nfs --> off
+allow_tftp_anon_write --> off
+ftp_home_dir --> off
+ftpd_connect_db --> off
+ftpd_disable_trans --> on
+ftpd_is_daemon --> on
+httpd_enable_ftp_server --> off
+tftpd_disable_trans --> off
+
+ 
+
+打开ftp_home_dir或者 ftpd_disable_trans。都可以达到在enforcing级别下，允许FTP正常登录的效果。
+
+setsebool -P ftpd_disable_trans 1
+或者
+setsebool -P ftp_home_dir 1
+service vsftpd restart
+
+加-P是保存选项，每次重启时不必重新执行这个命令了。最后别忘了在/etc/sysconfig/selinux中，修改SELINUX=enforcing。
+

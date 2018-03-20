@@ -1,0 +1,42 @@
+./configure --prefix=/usr/local/nginx \
+	--with-http_realip_module \
+	--with-http_sub_module \
+	--with-http_gzip_static_module \
+	--with-http_stub_status_module \
+	--with-pcre \
+	--with-http_ssl_module \
+	--with-http_addition \
+	--with-http_random_index_module \
+	--with-http_dav_module \
+	--add-module=/usr/local/src/nginx_upstream_hash-/ \
+	--add-module=/usr/local/src/gnosek-nginx-upstream-fair-/ \
+	--add-module=/usr/local/src/nginx_mod_h264_streaming-2.2.7/
+	
+添加模块
+make
+无需make install
+cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx_bak
+cp ./opjs/nginx /usr/local/nginx/sbin/
+
+
+为晒晒IQ网颁发证书。ssh登陆到服务器上，终端输入以下命令，使用openssl生成RSA密钥及证书。
+# 生成一个RSA密钥 
+$ openssl genrsa -des3 -out 33iq.key 1024
+ 
+# 拷贝一个不需要输入密码的密钥文件
+$ openssl rsa -in 33iq.key -out 33iq_nopass.key
+ 
+# 生成一个证书请求
+$ openssl req -new -key 33iq.key -out 33iq.csr
+ 
+# 自己签发证书
+$ openssl x509 -req -days 365 -in 33iq.csr -signkey 33iq.key -out 33iq.crt
+
+第3个命令是生成证书请求，会提示输入省份、城市、域名信息等，重要的是，email一定要是你的域名后缀的。这样就有一个 csr 文件了，提交给 ssl 提供商的时候就是这个 csr 文件。当然我这里并没有向证书提供商申请，而是在第4步自己签发了证书。
+
+
+1.server {
+2.listen 80;
+3.server_name ww.centos.bz;
+4.rewrite ^(.*) https://$server_name$1 permanent;
+5.}

@@ -1,0 +1,40 @@
+nginx location匹配规则
+location [=|~|~*|^~] /uri/{ ... }
+= 表示精确匹配，这个优先级也是最高的
+^~表示uri以某个常规字符串开头，理解为匹配url路径即可。nginx不对url做编码，因此请求为/static/20%/aa，可以被规则^~ /static/ /aa匹配到
+~ 表示区分大小写的正则匹配
+~* 表示不区分大小写的正则匹配
+!~和!~*分别为区分大小写不匹配和不区分大小写不匹配的正则
+/ 通用匹配，任何请求都会匹配到，默认匹配
+
+访问http://a.shang.com/.因为/是完全匹配的
+curl http://a.shang.com/
+location =/ {}
+
+访问http://a.shang.com/nginx ,因为完全匹配了"/nginx"
+curl http://a.shang.com/nginx
+location =/nginx {}
+
+访问http://a.shang.com/nginx, 从第一个开始尝试匹配，最后匹配到了 ~* \.png$ .
+curl http://a.shang.com/xxx/1111.PNG
+all-png
+
+访问http://a.shang.com/static/1111.png,虽然static放在最后面，但是因为有 ^的缘故，他是最匹配的。
+curl http://a.shang.com/static/1111.png
+static
+
+静态文件的匹配规则
+location ~* .*\.(js|css)?$
+{
+	expiress 7d;	//7天过期
+	access_log off;	//不保存日志
+}
+location ~* .*\.(png|jpg|gi|jepg|bmp|ico)?$
+{
+	expiress 7d;
+	eccess_log off;
+}
+location ~* .*\.(zip|rar|exe|msi|iso|gho|mp3|rmvb|mp4|wma|wmv|rm)?$
+{
+	deny all;	\\禁止这些文件下载
+}

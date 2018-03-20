@@ -1,0 +1,181 @@
+利用前期搭建好的nginx环境，反向代理java web(jsp，servlet)
+
+安装包：nginx、tomcat、JDK
+1.nginx环境搭建，按照之前的文档
+2.安装tomcat
+2.1利用系统自建的yum源安装(建议，解决依赖问题)
+	#yum install -y tomcat*
+
+安装完毕之后，启动tomcat
+	# /etc/init.d/tomcat6 restart
+
+3.安装jdk
+3.1检查系统默认的JDK信息,用java -version显示版本号，其实jdk环境没有配置好
+	# rpm -qa |grep java
+	tzdata-java-2012c-1.el6.noarch
+	java-1.6.0-openjdk-1.6.0.0-1.45.1.11.1.el6.x86_64
+	……
+	
+卸载openjdk(如果有多个openjdk，都需要用rpm卸载)
+	# rpm -e --nodeps tzdata-java-2012c-1.el6.noarch
+	# rpm -e --nodeps java-1.6.0-openjdk-1.6.0.0-1.45.1.11.1.el6.x86_64
+安装jdk
+到官网下载新的jdk，我这里下载的是最新版的 jdk-8u65-linux-x64.rpm
+上传新的rpm包到/usr/local/src
+	#cd /usr/local/src
+	#rpm -ivh jdk-8u65-linux-x64.rpm
+JDK默认安装在/usr/java中
+验证安装
+
+执行下面操作，查看信息是否正常
+	#java
+	#javac
+	#java -version
+	java version "1.8.0_65"
+	Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
+	Java HotSpot(TM) 64-Bit Server VM (build 25.65-b01, mixed mode)
+	
+接下来配置环境变量
+安装完jdk-8u65-linux-x64.rpm后不用配置环境变量也可以正常执行javac、java–version操作，最好进行JDK环境变量的配置。但是为了以后的不适之需，记录一下怎么进行配置，操作如下：
+	#vim /etc/profile
+	添加如下内容
+	JAVA_HOME=/usr/java/jdk1.8.0_91
+	JRE_HOME=/usr/java/jdk1.8.0_91/jre
+	PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+	CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+	export JAVA_HOME JRE_HOME PATH CLASSPATH
+	
+--------------------------------------------------------------------------------------------------------
+	使配置生效
+	#source /etc/profile
+	
+	#echo $JAVA_HOME   //查看PATH值 
+	/usr/java/jdk1.8.0_65
+	
+--------------------------------------------------------------------------------------------------------
+以上配置完成tomcat和jdk配置
+
+接下来配置tomcat和nginx
+因为此前是多站多配置，所有在/usr/local/nginx/conf.d/下面新建一个 java.conf文件
+下面的nginx是采用的是动静分离，目的：nginx处理用户请求的静态页面，tomcat处理用户请求jsp页面，来实现动态分离，nginx处理静态页面效率远高于tomcat，这样一来就能更好的提高并发，处理性能。
+#vim /usr/local/nginx/conf.d/java.conf
+upstream mytomcats {  #用负载均衡可以满足tomcat多站点，提高使用率
+      server 192.168.1.11:8080;  
+}  
+ 
+server {  
+      listen 8085;  
+      server_name java.shang.com;  
+      index index.html index.jsp index.php index.htm;
+      access_log /usr/local/nginx/logs/java_access.log main;
+      error_log /usr/local/nginx/logs/java_error.log error;
+ 
+location ~ .*.jsp$ {  
+		root /var/lib/tomcat6/webapps/ROOT/;
+        index index.jsp index.html;
+        proxy_pass http://mytomcats;	#来自jsp请求交给tomcat处理
+        proxy_redirect off;  
+        proxy_set_header Host $host;	#后端的Web服务器可以通过X-Forwarded-For获取用户真实IP
+        proxy_set_header X-Real-IP $remote_addr;  
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  
+        client_max_body_size 10m;		#允许客户端请求的最大单文件字节数
+        client_body_buffer_size 128k;	#缓冲区代理缓冲用户端请求的最大字节数
+        proxy_connect_timeout 90;		#nginx跟后端服务器连接超时时间(代理连接超时)
+        proxy_send_timeout 90;			#连接成功后，后端服务器响应时间(代理发送超时)
+        proxy_read_timeout 90;  		#连接成功后，后端服务器响应时间(代理接收超时)
+        proxy_buffer_size 4k;			#设置代理服务器（nginx）保存用户头信息的缓冲区大小
+        proxy_buffers 4 32k;			#proxy_buffers缓冲区，网页平均在32k以下的话，这样设置
+        proxy_busy_buffers_size 64k;	#高负荷下缓冲大小（proxy_buffers*2）
+        proxy_temp_file_write_size 64k;	#设定缓存文件夹大小，大于这个值，将从upstream服务器传
+}  
+
+location ~ .*\.(gif|jpg|png|bmp|swf)$   #由nginx处理静态页面,可以添加更新静态页面格式
+        {
+        expires 30d;   #使用expires缓存模块，缓存到客户端30天
+        }
+        location ~ .*\.( jsp|js|css)?$
+        {
+        expires 1d;
+        }
+        error_page  404              /404.html;   #错误页面
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
+
+----------------------------------------------------------------------------------------------------------------------
+重启nginx
+# nginx -s reload
+
+用浏览器访问 http://192.168.1.11:8085和http://192.168.1.11:8085/index.jsp
+
+以上完成nginx反向代理tomcat对java的支持
+
+配置servlet的web支持
+1.先要检查javac可用，用一个测试检查
+编写一个.java文件
+#vim HelloWorld.java
+添加如下内容
+public class HelloWorld{
+	public static void main{
+		System.out.println("HelloWorld");
+	}
+}
+
+保存以上
+#javac HelloWorld.java
+#java HelloWorld      #运行之后显示HelloWorld ,说明jdk可用
+
+2.在/var/lib/tomcat6/webapps/下面创建文件夹
+#mkdir -p /var/lib/tomcat6/webapps/myroot/WEB-INF/classes/mypackage 	#此目录存放java编译好的.class文件
+把编译好的.class的文件复制到mypackage下面
+在/var/lib/tomcat6/webapps/myroot/WEB-INF 下创建web.xml文件
+#cd /var/lib/tomcat6/webapps/myroot/WEB-INF/
+#vim web.xml
+#添加如下内容
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <display-name>Hello, World Application</display-name>
+    <description>
+        This is a simple web application with a source code organization
+        based on the recommendations of the Application Developer's Guide.
+    </description>
+
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>mypackage.Hello</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/servlet</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+-----------------------------------------------------------------------------------------------------
+在web.xml中配置， 
+基本格式如下： 
+<servlet> 
+  <servlet-name>名称（可以随便取） </servlet-name> 
+  <servlet-class>类名（包含包名） </servlet-class> 
+</servlet> 
+<servlet-mapping> 
+  <servlet-name>与sevlet标签中的名称一致 </servlet-name> 
+  <url-pattern>匹配的URL格式，比如/*.do </url-pattern> 
+</servlet-mapping> 
+
+如果需要多个servlet，则添加多个<servlet></servlet>和<servlet-mapping></servlet-mapping>
+
+配置完之后最后重启tomcat服务
+
+用浏览器访问 http://192.168.1.11:8080/servlet ，不返回java错误，说明配置正确
+
+
+由于上面已配置nginx反向代理tomcat，所以用浏览器访问 http://192.168.1.11:8085/servlet 也是可以正常访问的！！！！
+如果nginx没有配置，可以使用上面的nginx配置
+

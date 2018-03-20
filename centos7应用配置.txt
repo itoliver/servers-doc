@@ -1,0 +1,568 @@
+# cd /usr/local/src/
+# wget -ct 5 http://nginx.org/download/nginx-1.9.9.tar.gz
+# wget -ct 5 http://mirrors.opencas.cn/mariadb//mariadb-10.1.10/bintar-linux-x86_64/mariadb-10.1.10-linux-x86_64.tar.gz
+# wget -ct 5 http://cn2.php.net/distributions/php-5.6.19.tar.gz
+# wget -ct 5 ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz
+# wget -ct 5 http://www.openssl.org/source/openssl-1.0.1i.tar.gz
+# wget -ct 5 http://zlib.net/zlib-1.2.8.tar.gz
+# wget -ct 5 http://www.cmake.org/files/v2.8/cmake-2.8.11.2.tar.gz
+# wget -ct 5 http://nchc.dl.sourceforge.net/project/mcrypt/Libmcrypt/2.5.8/libmcrypt-2.5.8.tar.gz
+# wget -ct 5 http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+# wget -ct 5 http://down1.chinaunix.net/distfiles/zlib-1.2.5.1.tar.gz
+# wget -ct 5 ftp://sunsite.unc.edu/pub/Linux/libs/graphics/t1lib-5.1.2.tar.gz
+# wget -ct 5 https://bitbucket.org/libgd/gd-libgd/downloads/libgd-2.1.0.tar.gz
+# wget -ct 5 http://storage.googleapis.com/downloads.webmproject.org/releases/webm/libvpx-1.5.0.tar.bz2
+# wget -ct 5 http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz
+# wget -ct 5 ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.21.tar.gz
+# wget -ct 5 http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2 
+# wget -ct 5 http://www.ijg.org/files/jpegsrc.v9a.tar.gz
+# wget -ct 5 http://wiki.nginx.org/images/5/51/Nginx-accesskey-2.0.3.tar.gz
+# git clone https://github.com/arut/nginx-rtmp-module.git
+
+
+# yum install -y apr* autoconf automake bison bzip2 bzip2* cloog-ppl compat* cpp curl curl-devel fontconfig fontconfig-devel freetype freetype* freetype-devel gcc gcc-c++ gtk+-devel gd gettext gettext-devel glibc kernel kernel-headers keyutils keyutils-libs-devel krb5-devel libcom_err-devel libpng libpng-devel libjpeg* libsepol-devel libselinux-devel libstdc++-devel libtool* libgomp libxml2 libxml2-devel libXpm* libtiff libtiff* make mpfr ncurses* ntp openssl openssl-devel patch pcre-devel perl php-common php-gd policycoreutils telnet t1lib t1lib* nasm nasm* zlib-devel gd-devel
+
+
+# tar -zxvf cmake-2.8.11.2.tar.gz
+# cd /usr/local/src/cmake-2.8.11.2
+# ./configure
+# make && make install
+
+# groupadd mysql
+# useradd -g mysql -s /bin/false
+# mkdir -p /data/mysql
+# chown -R mysql.mysql /data/mysql
+
+# mkdir -p /usr/local/mysql
+# cd /usr/local/src/
+# tar -zxvf mariadb-10.1.10-linux-x86_64.tar.gz
+# cd mariadb-10.1.10-linux-x86_64
+# cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/data/mysql -DSYSCONFDIR=/etc
+# make
+# make install
+
+# mv /etc/my.cnf /etc/my.cnf_bak
+
+# cd /usr/local/mysql
+# ./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql
+# ln -s /usr/local/mysql/my.cnf /etc/my.cnf
+# cp ./support-files/mysql.server /etc/rc.d/init.d/mysqld
+# chmod 755 /etc/init.d/mysqld
+# chkconfig mysqld on
+
+# 配置mariadb启动脚本
+# vim /etc/rc.d/init.d/mysqld
+# 改动如下：
+# basedir=/usr/local/mysql #MySQL程序安装路径
+# datadir=/data/mysql #MySQl数据库存放目录
+# ##重启MySQL
+# service mysqld start
+
+# 加入环境变量
+# echo 'export PATH=$PATH:/usr/local/mysql/bin'>>/etc/profile && source /etc/profile
+
+# 把mariadb的库文件链接到系统默认，编译php软件的时候可以不用指定其库文件地址
+# ln -s /usr/local/mysql/lib/mysql /usr/lib/mysql &&
+# ln -s /usr/local/mysql/include/mysql /usr/include/mysql &&
+# mkdir /var/lib/mysql &&
+# ln -s /tmp/mysql.sock /var/lib/mysql/mysql.sock
+
+# 交互式设置数据库
+# [root@localhost mysql]# mysql_secure_installation
+# NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      # SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+ 
+# In order to log into MariaDB to secure it, we'll need the current
+# password for the root user.  If you've just installed MariaDB, and
+# you haven't set the root password yet, the password will be blank,
+# so you should just press enter here.
+ 
+# Enter current password for root (enter for none):
+# OK, successfully used password, moving on...
+ 
+# Setting the root password ensures that nobody can log into the MariaDB
+# root user without the proper authorisation.
+ 
+# Set root password? [Y/n] Y
+# New password:
+# Re-enter new password:
+# Password updated successfully!
+# Reloading privilege tables..
+ # ... Success!
+ 
+ 
+# By default, a MariaDB installation has an anonymous user, allowing anyone
+# to log into MariaDB without having to have a user account created for
+# them.  This is intended only for testing, and to make the installation
+# go a bit smoother.  You should remove them before moving into a
+# production environment.
+ 
+# Remove anonymous users? [Y/n] Y
+ # ... Success!
+ 
+# Normally, root should only be allowed to connect from 'localhost'.  This
+# ensures that someone cannot guess at the root password from the network.
+ 
+# Disallow root login remotely? [Y/n] Y
+ # ... Success!
+ 
+# By default, MariaDB comes with a database named 'test' that anyone can
+# access.  This is also intended only for testing, and should be removed
+# before moving into a production environment.
+ 
+# Remove test database and access to it? [Y/n] Y
+ # - Dropping test database...
+ # ... Success!
+ # - Removing privileges on test database...
+ # ... Success!
+ 
+# Reloading the privilege tables will ensure that all changes made so far
+# will take effect immediately.
+ 
+# Reload privilege tables now? [Y/n] Y
+ # ... Success!
+ 
+# Cleaning up...
+ 
+# All done!  If you've completed all of the above steps, your MariaDB
+# installation should now be secure.
+ 
+# Thanks for using MariaDB!
+
+
+
+安装nginx
+创建nginx用户以及组
+groupadd nginx
+useradd -g nginx nginx -s /bin/false
+
+安装pcre
+cd /usr/local/src
+mkdir /usr/local/pcre
+tar -zxvf pcre-8.38.tar.gz
+cd pcre-8.38
+./configure --prefix=/usr/local/pcre
+make
+make install
+
+安装openssl
+cd /usr/local/src
+mkdir /usr/local/openssl
+tar -zxvf openssl-1.0.1i.tar.gz
+cd openssl-1.0.1i
+./config --prefix=/usr/local/openssl
+make
+make install
+echo 'export PATH=$PATH:/usr/local/openssl/bin' >> /etc/profile
+source /etc/profile
+
+安装zlib
+cd /usr/local/src
+mkdir /usr/local/zlib
+tar zxvf zlib-1.2.8.tar.gz
+cd zlib-1.2.8
+./configure --prefix=/usr/local/zlib
+make
+make install
+
+安装第三方模块，实现nginx防盗链
+cd /usr/local/src
+tar -zxvf Nginx-accesskey-2.0.3.tar.gz
+cd Nginx-accesskey-2.0.3
+
+sed -i 's/$HTTP_ACCESSKEY_MODULE/ngx_http_accesskey_module/g' config
+
+安装nginx
+cd /usr/local/src
+tar -zxvf nginx-1.6.2.tar.gz
+cd nginx-1.6.2
+./configure --prefix=/usr/local/nginx \
+--without-http_memcached_module \
+--user=nginx \
+--group=nginx \
+--with-http_stub_status_module \
+--with-http_ssl_module \
+--with-http_gzip_static_module \
+--with-http_dav_module \
+--with-http_random_index_module \
+--with-http_addition_module \
+--with-http_sub_module \
+--with-http_realip_module \
+--without-http_rewrite_module \
+--with-openssl=/usr/local/src/openssl-1.0.1i \
+--with-zlib=/usr/local/src/zlib-1.2.8 \
+--with-pcre=/usr/local/src/pcre-8.38 \
+--add-module=/usr/local/src/nginx-requestkey-module \
+--add-module=/usr/local/src/nginx-rtmp-module/
+
+
+make
+make install
+
+nginx控制脚本
+vim/etc/rc.d/init.d/nginx
+
+#!/bin/sh
+#
+# nginx - this script starts and stops the nginx daemon
+#
+# chkconfig: - 85 15
+# description: Nginx is an HTTP(S) server, HTTP(S) reverse \
+# proxy and IMAP/POP3 proxy server
+# processname: nginx
+# config: /etc/nginx/nginx.conf
+# config: /usr/local/nginx/conf/nginx.conf
+# pidfile: /usr/local/nginx/logs/nginx.pid
+ 
+# Source function library.
+. /etc/rc.d/init.d/functions
+ 
+# Source networking configuration.
+. /etc/sysconfig/network
+ 
+# Check that networking is up.
+[ "$NETWORKING" = "no" ] && exit 0
+nginx="/usr/local/nginx/sbin/nginx"
+prog=$(basename $nginx)
+NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
+[ -f /etc/sysconfig/nginx ] && . /etc/sysconfig/nginx
+lockfile=/var/lock/subsys/nginx
+ 
+make_dirs() {
+	# make required directories
+	user=`$nginx -V 2>&1 | grep "configure arguments:" | sed 's/[^*]*--user=\([^ ]*\).*/\1/g' -`
+	if [ -z "`grep $user /etc/passwd`" ]; then
+	useradd -M -s /bin/nologin $user
+	fi
+	options=`$nginx -V 2>&1 | grep 'configure arguments:'`
+	for opt in $options; do
+	if [ `echo $opt | grep '.*-temp-path'` ]; then
+	value=`echo $opt | cut -d "=" -f 2`
+	if [ ! -d "$value" ]; then
+	# echo "creating" $value
+	mkdir -p $value && chown -R $user $value
+	fi
+	fi
+	done
+}
+ 
+start() {
+	[ -x $nginx ] || exit 5
+	[ -f $NGINX_CONF_FILE ] || exit 6
+	make_dirs
+	echo -n $"Starting $prog: "
+	daemon $nginx -c $NGINX_CONF_FILE
+	retval=$?
+	echo
+	[ $retval -eq 0 ] && touch $lockfile
+	return $retval
+}
+ 
+stop() {
+	echo -n $"Stopping $prog: "
+	killproc $prog -QUIT
+	retval=$?
+	echo
+	[ $retval -eq 0 ] && rm -f $lockfile
+	return $retval
+}
+ 
+restart() {
+	#configtest || return $?
+	stop
+	sleep 1
+	start
+}
+ 
+reload() {
+	#configtest || return $?
+	echo -n $"Reloading $prog: "
+	killproc $nginx -HUP
+	RETVAL=$?
+	echo
+}
+ 
+force_reload() {
+	restart
+}
+ 
+configtest() {
+	$nginx -t -c $NGINX_CONF_FILE
+}
+ 
+rh_status() {
+	status $prog
+}
+ 
+rh_status_q() {
+	rh_status >/dev/null 2>&1
+}
+ 
+case "$1" in
+start)
+rh_status_q && exit 0
+$1
+;;
+stop)
+ 
+rh_status_q || exit 0
+$1
+;;
+restart|configtest)
+$1
+;;
+reload)
+rh_status_q || exit 7
+$1
+;;
+force-reload)
+force_reload
+;;
+status)
+rh_status
+;;
+condrestart|try-restart)
+rh_status_q || exit 0
+;;
+*)
+echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}"
+exit 2
+esac
+
+
+chmod 775 /etc/rc.d/init.d/nginx
+chkconfig nginx on
+/etc/rc.d/init.d/nginx start
+
+nginx加入到系统环境变量
+echo 'export PATH=$PATH:/usr/local/nginx/sbin' >> /etc/profile
+source /etc/profile
+
+安装php
+#安装yasm
+cd /usr/local/src
+tar -zxvf yasm-1.3.0.tar.gz
+cd yasm-1.3.0
+./configure
+make
+make install
+
+#安装mcrypt
+cd /usr/local/src
+tar -zxvf libmcrypt-2.5.8.tar.gz
+cd libmcrypt-2.5.8
+./configure
+make
+make install
+
+#安装libvpx
+cd /usr/local/src
+tar -jxvf libvpx-1.5.0.tar.bz2
+cd libvpx-1.5.0
+./configure --prefix=/usr/local/libvpx --enable-shared --enable-vp9
+make
+make install
+
+#安装tiff
+cd /usr/local/src
+tar -zxvf tiff-4.0.3.tar.gz
+cd tiff-4.0.3
+./configure --prefix=/usr/local/tiff --enable-shared
+make
+make install
+
+#安装libpng
+cd /usr/local/src
+tar -zxvf libpng-1.6.21.tar.gz
+cd libpng-1.6.21
+./configure --prefix=/usr/local/libpng --enable-shared --with-x=no
+make
+make install
+
+#安装jpeg
+cd /usr/local/src
+tar -zxvf jpegsrc.v9a.tar.gz
+cd jpeg.9a
+./configure --prefix=/usr/local/jpeg --enable-shared
+make
+make install
+
+#安装freetype
+cd /usr/local/src
+tar -jxvf freetype-2.5.3.tar.bz2
+cd freetype-2.5.3
+./configure --prefix=/usr/local/freetype --enable-shared
+
+#安装libgd
+cd /usr/local/src
+tar -zxvf libgd-2.1.0.tar.gz
+cd libgd-2.1.0
+./configure --prefix=/usr/local/libgd --enable-shared --with-jpeg=/usr/local/jpeg --with-png=/usr/local/libpng --with-freetype=/usr/local/freetype --with-fontconfig=/usr/local/freetype --with-xpm=/usr/ --with-tiff=/usr/local/tiff --with-vpx=/usr/local/libvpx
+make
+make install
+
+#安装t1lib
+cd /usr/local/src
+tar -zxvf t1lib-5.1.2.tar.gz
+cd t1lib-5.1.2
+./configure --prefix=/usr/local/t1lib --enable-shared
+make
+make install
+
+
+#安装php
+ln -s /usr/lib64/libltdl.so /usr/lib/libltdl.so
+\cp -frp /usr/lib64/libXpm.so* /usr/lib/
+
+#编译安装php
+cd /usr/local/src
+tar -zxvf php-5.6.19.tar.gz
+cd php-5.6.19
+
+groupadd php-fpm
+useradd -g php-fpm php-fpm -s /bin/false
+
+export LD_LIBRARY_PATH=/usr/local/libgd/lib
+
+./configure --prefix=/usr/local/php \
+--with-config-file-path=/usr/local/php/etc \
+--enable-mysqlnd \
+--with-mysql-sock=/var/lib/mysql/mysql.sock \
+--with-mysql=mysqlnd \
+--with-mysqli=/usr/bin/mysql_config \
+--with-mysqli=mysqlnd \
+--with-pdo-mysql=mysqlnd \
+--enable-safe-mode \
+--with-gd \
+--with-png-dir \
+--with-jpeg-dir \
+--with-freetype-dir \
+--with-xpm-dir \
+--with-zlib-dir \
+--with-iconv \
+--enable-fpm \
+--with-fpm-user=php-fpm \
+--with-fpm-group=php-fpm \
+--enable-libxml \
+--enable-xml \
+--enable-bcmath \
+--enable-shmop \
+--enable-sysvsem \
+--enable-inline-optimization \
+--enable-opcache \
+--enable-mbregex \
+--enable-mbstring \
+--enable-ftp \
+--enable-gd-native-ttf \
+--with-openssl \
+--enable-pcntl \
+--enable-sockets \
+--with-xmlrpc \
+--enable-zip \
+--enable-bz2 \
+--enable-xsl \
+--enable-soap \
+--without-pear \
+--with-gettext \
+--enable-session \
+--with-mcrypt \
+--with-curl \
+–-with-curlwrappers \
+–-enable-calendar \
+--enable-exif \
+--enable-ctype 
+
+make && make install
+
+cp php.ini-production /usr/local/php/etc/php.ini-production
+mv /etc/php.ini /etc/php.ini.bak
+ln -s /usr/local/php/etc/php.ini /etc/php.ini
+cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf
+ln -s /usr/local/php/etc/php-fpm.conf /etc/php-fpm.conf
+
+#修改php配置文件
+vim /usr/local/php/etc/php.ini
+
+;找到"disable_functions =" （禁用掉某些比较“危险”函数，大概在305行），改为
+disable_functions = passthru,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,escapeshellcmd,dll,popen,disk_free_space,checkdnsrr,checkdnsrr,getservbyname,getservbyport,disk_total_space,posix_ctermid,posix_get_last_error,posix_getcwd, posix_getegid,posix_geteuid,posix_getgid, posix_getgrgid,posix_getgrnam,posix_getgroups,posix_getlogin,posix_getpgid,posix_getpgrp,posix_getpid, posix_getppid,posix_getpwnam,posix_getpwuid, posix_getrlimit, posix_getsid,posix_getuid,posix_isatty, posix_kill,posix_mkfifo,posix_setegid,posix_seteuid,posix_setgid, posix_setpgid,posix_setsid,posix_setuid,posix_strerror,posix_times,posix_ttyname,posix_uname
+ 
+;找到";date.timezone ="（大概在913行），修改为date.timezone = Asia/Shanghai
+
+;找到"expose_php = On"(禁止显示php版本的信息，大概在366行)，修改为
+expose_php = Off 
+ 
+;找到"short_open_tag = Off"(支持php短标签，大概在202行)，修改为
+short_open_tag = On 
+ 
+;找到";opcache.enable=0"(支持opcode缓存，大概在1838行)，修改为
+opcache.enable=1
+ 
+;找到";opcache.enable_cli=0"(支持opcode缓存，大概在1841行)，修改为
+opcache.enable_cli=0
+
+;并在下面加入'zend_extension = "opcache.so"'一行,&nbsp;开启opcode缓存功能
+zend_extension = "opcache.so"
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.revalidate_freq=60
+opcache.fast_shutdown=1
+opcache.enable_cli=1
+
+#配置php-fpm
+vim /usr/local/php/etc/php-fpm.conf
+;取消pid前面的分号
+pid = run/php-fpm.pid
+;...
+;设置php-fpm运行账号为php-fpm
+user = php-fpm
+;设置php-fpm运行组为php-fpm
+group = php-fpm
+
+cp /usr/local/src/php-5.6.19/sapi/fpm/init.d.php-fpm /etc/rc.d/init.d/php-fpm
+chmod +x /etc/rc.d/init.d/php-fpm
+chkconfig php-fpm on
+
+echo 'export PATH=$PATH:/usr/local/php/bin' >> /etc/profile
+source /etc/profile
+
+#配置nginx支持php
+user nginx nginx;
+ 
+index index.php index.html index.htm; 
+ 
+# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+
+#
+#取消FastCGI server部分location的注释,注意fastcgi_param行的参数,改为$document_root$fastcgi_script_name,或者使用绝对路径
+location ~ \.php$ {
+root html;
+fastcgi_pass 127.0.0.1:9000;
+fastcgi_index index.php;
+fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+include fastcgi_params;
+}
+
+service nginx restart
+service php-fpm start
+service mysql start
+
+
+useradd shangtv
+passwd shangtv
+
+mkdir /data/
+setfacl -R -m o::r-- /data
+setfacl -R -m g::rw- /data
+setfacl -R -m u:shangtv:rwx /data
+
+setfacl -R -d --set o::r-- /data
+setfacl -R -d --set g::rw- /data
+setfacl -R -d --set u:shangtv:rwx /data
+
+mkdir /data/mygo
+
+
+
+
+

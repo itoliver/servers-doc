@@ -1,0 +1,21 @@
+一.初步分析
+用netstat -an命令对系统开启的端口检查或者用ps等命令
+
+二.断网分析系统
+两种方法避免
+第一，将服务器硬盘挂载到另外的服务器上检查，第二，命令替换
+1.首先查看系统登录日志，查看可以登录信息
+more /var/log/secure |grep Accepted
+确认登录用户和登录ip
+
+2.接着查看系统密码文件
+cat /etc/shadow
+
+3.查看其他系统日志 /var/log/messages /var/log/wtmp
+
+三.寻找攻击源
+1.用ps查看系统目前运行的进程，接着发现新的可疑的进程，用top查看进程程序
+进入内存目录，查看对应PID目录下的exe文件信息
+/mnt/bin/ls -al /proc/PID/exe
+
+2.根据exe文件系统进入所在的目录

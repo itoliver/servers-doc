@@ -1,0 +1,157 @@
+安装配置KVM 相关软件
+
+　　1 系统要求：
+
+　　处理器需求:需要一台可以运行最新linux内核的Intel处理器(含VT虚拟化技术)或AMD处理器(含SVM安全虚拟机技术的AMD处理器, 也叫AMD-V)。可以使用如下命令检查：
+
+　　# egrep '(vmx|svm)' --color=always /proc/cpuinfo
+
+　　flags : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse
+
+　　flags : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse
+
+　　如果输出的结果包含 vmx，它是 Intel处理器虚拟机技术标志;如果包含 svm，它是 AMD处理器虚拟机技术标志;。如果你甚么都得不到，那应你的系统并没有支持虚拟化的处理 ，不能使用kvm。另外Linux 发行版本必须在64bit环境中才能使用KVM。
+
+ 
+
+　　2 安装软件
+
+　　安装KVM模块、管理工具和libvirt (一个创建虚拟机的工 具)，我们使用命令行安装：
+
+　　#yum install kvm virt-manager libvirt
+
+　　#/sbin/service libvirtd start
+
+ 
+
+　　3 确定正确加载kvm模块
+
+　　运行命令 lsmod | grep kvm 检查 KVM 模块是否成功安装。如果结果类似于以下输出，那么 KVM 模块已成功安装：
+
+　　# lsmod | grep kvm　
+
+         kvm_intel              54285  0
+
+         kvm                   333172  1 kvm_intel
+
+ 
+
+　　4 检查KVM是否成功安装
+
+　　virsh -c qemu:///system list
+
+　　将会显示如下结果:
+
+　　# virsh -c qemu:///system list
+
+　　Id Name State
+
+　　----------------------------------
+
+　　如果在这里显示的是一个错误的信息，说明有些东西出现了问题。
+
+********************************
+
+########关闭网络管理工具
+
+chkconfig NetworkManager off    
+
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+注释掉 #NM_CONTROLLED=yes
+
+/etc/init.d/NetworkManager stop && /etc/init.d/network  restart
+
+******Linux : Bridge support not available: brctl not found
+
+yum -y install bridge-utils tunctl
+
+########配置桥接网络
+
+cp ifcfg-eth0 ifcfg-br0
+
+####手动修改成固定IP
+
+vi ifcfg-br0
+
+DEVICE=br0
+
+TYPE=Bridge
+
+ONBOOT=yes
+
+BOOTPROTO=static
+
+ IPADDR=192.168.0.16
+
+NETMASK=255.255.255.0
+
+GATEWAY=192.168.0.1
+
+####修改 ifcfg-eth0
+
+DEVICE=eth0
+
+TYPE=Ethernet
+
+ONBOOT=yes
+
+BRIDGE=br0
+
+#####重启网络
+
+/etc/init.d/network restart
+
+通过图形介面 virtual machine manager 新建虚拟主机。
+
+***************************************************************
+
+KVM主机本机虚拟机直接克隆
+
+# virt-clone -o oeltest01 -n oeltest02 -f /var/lib/libvirt/test02.img
+
+说明：以oeltest01做为源，克隆oeltest01虚拟机，并创建名称为oeltest02虚拟机，使用磁盘文件/var/lib/libvirt/test02.img
+
+1.virsh start oeltest02
+2.virsh list --all
+3.注意vns端口号要修改  virsh edit oeltest02
+
+ 
+
+******修改eth0 内容
+
+******如果克隆的虚拟机是RHEL/CentOS/OEL6.x操作系统，还需要修改删除 eth0和eth的内容，路径 ：/etc/udev/rules.d/70-persistent-net.rules文件
+
+ 
+
+ 
+
+****************
+
+命令行安装 kvm
+
+*********
+
+[root@localhost mnt]# virt-install --name=ck --ram 512 --vcpus=1 --disk path=/var/lib/libvirt/images/ck.img,size=7,bus=virtio  --accelerate --cdrom /mnt/CentOS-6.5-x86_64-bin-DVD1.iso --vnc --vncport=5959 --vnclisten=0.0.0.0 --network bridge=br0,model=virtio --noautoconsole
+
+Starting install... Allocating 'ck.img'                                                                                                             | 7.0 GB     00:00    
+
+ERROR    internal error Process exited while reading console log output: char device redirected to /dev/pts/2
+
+qemu-kvm: -drive file=/mnt/CentOS-6.5-x86_64-bin-DVD1.iso,if=none,media=cdrom,id=drive-ide0-1-0,readonly=on,format=raw: could not open disk image /mnt/CentOS-6.5-x86_64-bin-DVD1.iso: Permission denied
+
+Domain installation does not appear to have been successful.
+
+If it was, you can restart your domain by running:   virsh --connect qemu:///system start ck otherwise, please restart your installation.
+
+########### 关闭selinux和防火墙，可解决####
+
+ 
+
+ 
+
+****************
+
+用vnc远程连接 kvm客户机安装系统
+
+修改Expert里的 ColourLevel 为 0

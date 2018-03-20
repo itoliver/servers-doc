@@ -1,0 +1,235 @@
+#!/bin/bash
+#--------------------一键搭建LNMP环境--------------------------
+#--------------------------------by oliver---------------------
+#--------------------------------------------------------------
+
+#先关闭防火墙和selinux
+/etc/init.d/iptables stop
+setenforce 0
+
+#配置MariaDB yum源
+cat > /etc/yum.repos.d/mariadb.repo <<EOF
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.1.10/centos6-amd64
+gpgkey = https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck = 1
+EOF
+
+
+yum clean all
+yum makecache
+
+#安装之前先安装依赖包
+#先需要安装开发包
+yum -y groupinstall "Development Tools"
+
+#下面开始安装mariadb
+yum -y install MariaDB*
+
+#添加运行用户权限
+groupadd -r mariadb
+useradd -g mariadb -r mariadb -s /sbin/nologin
+
+#启动MariaDB
+service mysql start
+
+#配置数据库root密码
+mysqladmin -u root password '123456'
+
+#以上完成数据库安装
+
+#安装php所需组件
+yum -y install  libxml2 libxml2-devel libcrul libcurl-devel gd gd-devel libpng libpng-devel wget
+
+#安装libmcrypt
+cd /usr/local/src
+wget http://www.atomicorp.com/installers/atomic
+chmod +x atomic
+./atomic
+yum -y install php-mcrypt libmcrypt libmcrypt-devel
+
+#现在安装php
+cd /usr/local/src
+wget http://cn2.php.net/distributions/php-5.6.2.tar.gz
+tar zxvf php-5.6.2.tar.gz
+cd php-5.6.2
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --enable-fpm --with-fpm-user=php-fpm --with-fpm-group=pho-fpm --with-mysql=mysqlnd --with-mysql-sock=/tmp/mysql.sock --with-libxml-dir --with-gd --with-jpeg-dir --with-png-dir --with-freetype-dir --with-iconv-dir --with-zlib-dir --with-mcrypt --enable-soap --enable-gd-native-ttf --enable-ftp --enable-mbstring --enable-exif --disable-ipv6 --with-pear --with-curl --with-openssl
+
+make && make install
+
+cp /usr/local/src/php-5.6.2/php.ini-production /usr/local/php/etc/php.ini
+cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf
+/usr/local/php/sbin/php-fpm -t
+cp /usr/local/src/php-5.6.2/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+chmod 755 /etc/init.d/php-fpm
+
+#创建php运行用户
+groupadd -r php-fpm
+useradd -g php-fpm -r php-fpm -s /sbin/nologin
+
+#启动php
+/etc/init.d/php-fpm start
+
+
+#安装nginx
+#先安装依赖包
+yum install –y pcre pcre-devel openssl openssl-devel
+cd /usr/local/src
+wget http://nginx.org/download/nginx-1.6.2.tar.gz
+tar zxvf nginx-1.6.2.tar.gz
+
+#下载rtmp等第三方包
+./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_realip_module --with-http_sub_module --with-http_gzip_static_module --with-http_stub_status_module --with-http_addition_module --with-http_dav_module --with-pcre
+
+make && make install
+
+#创建启动脚本
+cat > /etc/init.d/nginx <<EOF
+#!/bin/sh 
+# 
+# nginx - this script starts and stops the nginx daemon 
+# 
+# chkconfig:   - 85 15 
+# description: Nginx is an HTTP(S) server, HTTP(S) reverse \ 
+#               proxy and IMAP/POP3 proxy server 
+# processname: nginx 
+# config:      /etc/nginx/nginx.conf 
+# config:      /etc/sysconfig/nginx 
+# pidfile:     /var/run/nginx.pid 
+
+# Source function library. 
+. /etc/rc.d/init.d/functions 
+
+# Source networking configuration. 
+. /etc/sysconfig/network 
+
+# Check that networking is up. 
+[ "$NETWORKING" = "no" ] && exit 0 
+
+nginx="/usr/local/nginx/sbin/nginx" 
+prog=$(basename $nginx) 
+
+NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf" 
+
+[ -f /etc/sysconfig/nginx ] && . /etc/sysconfig/nginx 
+
+lockfile=/var/lock/subsys/nginx 
+
+start() { 
+    [ -x $nginx ] || exit 5 
+    [ -f $NGINX_CONF_FILE ] || exit 6 
+    echo -n $"Starting $prog: " 
+    daemon $nginx -c $NGINX_CONF_FILE 
+    retval=$? 
+    echo 
+    [ $retval -eq 0 ] && touch $lockfile 
+    return $retval 
+} 
+
+stop() { 
+    echo -n $"Stopping $prog: " 
+    killproc $prog -QUIT 
+    retval=$? 
+    echo 
+    [ $retval -eq 0 ] && rm -f $lockfile 
+    return $retval 
+killall -9 nginx 
+} 
+
+restart() { 
+    configtest || return $? 
+    stop 
+    sleep 1 
+    start 
+} 
+
+reload() { 
+    configtest || return $? 
+    echo -n $"Reloading $prog: " 
+    killproc $nginx -HUP 
+RETVAL=$? 
+    echo 
+} 
+
+force_reload() { 
+    restart 
+} 
+
+configtest() { 
+$nginx -t -c $NGINX_CONF_FILE 
+} 
+
+rh_status() { 
+    status $prog 
+} 
+
+rh_status_q() { 
+    rh_status >/dev/null 2>&1 
+} 
+
+case "$1" in 
+    start) 
+        rh_status_q && exit 0 
+    $1 
+        ;; 
+    stop) 
+        rh_status_q || exit 0 
+        $1 
+        ;; 
+    restart|configtest) 
+        $1 
+        ;; 
+    reload) 
+        rh_status_q || exit 7 
+        $1 
+        ;; 
+    force-reload) 
+        force_reload 
+        ;; 
+    status) 
+        rh_status 
+        ;; 
+    condrestart|try-restart) 
+        rh_status_q || exit 0 
+            ;; 
+    *)    
+      echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}" 
+        exit 2 
+esac
+EOF
+
+chmod +x /etc/init.d/nginx
+/etc/init.d/nginx -t 
+
+chkconfig --add nginx
+chkconfig nginx on
+chkconfig mysql on
+chkconfig php-fpm on
+
+
+/etc/init.d/nginx start
+
+curl localhost
+
+#开启防火墙和selinux
+/etc/init.d/iptables start
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT 
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+/etc/init.d/iptables save
+/etc/init.d/iptables restart
+
+setenforce 1
+
+#数据库用户root初始密码123456
+#本地ip地址#
+/sbin/ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"
+
+#防火墙规则
+iptables -L
+
+#脚本运行完毕，感谢您的使用！！！
+
+
+

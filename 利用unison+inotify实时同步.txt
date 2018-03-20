@@ -1,0 +1,151 @@
+以下内容是linux服务器中双向（多向）同步的部署过程，
+
+环境：
+服务器A:192.168.1.6，同步目录：/var/www
+服务器B:192.168.1.7，同步目录：/var/www
+
+安装 ctags-etags，避免安装unison出错
+yum install ctags-etags -y
+
+安装unison
+首先安装ocaml，版本至少为3.07或更高
+cd /usr/local/src
+wget http://caml.inria.fr/pub/distrib/ocaml-3.12/ocaml-3.12.1.tar.gz
+tar xf ocaml-3.12.1.tar.gz
+cd ocaml-3.12.1
+./configure
+make world opt
+make install
+cd ..
+
+安装unison
+wget http://www.seas.upenn.edu/~bcpierce/unison//download/releases/stable/unison-2.48.3.tar.gz
+tar xvf unison-2.48.3.tar.gz
+cd unison-2.48.3
+mkdir /root/bin
+make UISTYLE=text THREADS=true STATIC=true
+make install
+cd ..
+cp /root/bin/unison /usr/local/bin/
+
+注：
+UISTYLE=text THREADS=true STATIC=true表示使用命令行方式，加入线程支持以静态模式编译
+
+安装inotify
+yum install inotify-* -y
+
+配置双机ssh信任
+例假设本地机为：192.168.1.15(linux)
+远程机：192.168.1.16
+1. 在两台机器上创建 RSA密钥
+-----------------------------------------------------------------------------
+以下操作要在本地机和远程机上都执行一遍
+（1）以 root 用户登录
+（2）在 root 用户的 主目录内创建.ssh 目录并设置正确的权限
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+（3）使用 ssh-keygen 命令生成第 2 版本的 SSH 协议的 RSA 密钥
+ssh-keygen -t rsa
+-----------------------------------------------------------------------------
+在提示保存私钥（key）和公钥（public key）的位置时，使用默认值。 如果需要私钥密码（passphrase），则输入一个私钥密码（如果使用私钥密码，使用 ssh 执行远程命令时需要输入私钥密码，因此，本次中未使用私钥密码），因此，直接回车即可。
+
+2. 添加密钥到授权密钥文件（authorized key file）中
+（1）以 root 用户登录
+（2）在本地机上执行
+cd ~/.ssh
+ssh 192.168.1.15 cat /root/.ssh/id_rsa.pub >> authorized_keys
+ssh 192.168.1.16 cat /root/.ssh/id_rsa.pub >> authorized_keys
+scp authorized_keys 192.168.1.16:/root/.ssh/
+chmod 600  /root/.ssh/authorized_keys
+（3）在远程机192.168.1.16上：
+chmod 600  /root/.ssh/authorized_keys
+（4）测试
+完成后，在服务器上执行：
+ssh 192.168.1.15 date
+ssh 192.168.1.16 date
+如果不需要输入密码就出现系统日期，说明 SSH 配置成功。
+
+添加脚本
+在192.168.1.15服务器A上添加脚本：
+mkdir /script
+vim /script/inotify.sh
+######################以下是脚本内容#########################
+#/bin/bash
+UNISON=`ps -ef |grep -v grep|grep -c inotifywait`
+if [ ${UNISON} -lt 1 ]
+then
+ip2="192.168.1.16"
+src2="/data/"
+dst2="/data/ "
+/usr/bin/inotifywait -mrq -e create,delete,modify,move $src2 | while read line
+do
+/usr/local/bin/unison -batch $src2 ssh://$ip2/$dst2
+echo -n "$line " >> /var/log/inotify/inotify$(date +%u).log
+echo ` date +%F\ %T " " -f1-4` >> /var/log/inotify/inotify$(date +%u).log
+done
+fi
+###########################################################
+在192.168.1.16服务器上添加脚本：
+mkdir /script
+vim /script/inotify.sh
+######################以下是脚本内容#########################
+#/bin/bash
+UNISON=`ps -ef |grep -v grep|grep -c inotifywait`
+if [ ${UNISON} -lt 1 ]
+then
+ip2="192.168.1.15"
+src2="/data/"
+dst2="/data/ "
+/usr/bin/inotifywait -mrq -e create,delete,modify,move $src2 | while read line
+do
+/usr/local/bin/unison -batch $src2 ssh://$ip2/$dst2
+echo -n "$line " >> /var/log/inotify/inotify$(date +%u).log
+echo ` date +%F\ %T " " -f1-4` >> /var/log/inotify/inotify$(date +%u).log
+done
+fi
+###########################################################
+
+在二台服务器上修改脚本权限：
+chmod a+x /script/inotify.sh
+在两台服务器的计划任务中添加任务
+crontab –e
+#unison+inotify
+* * * * * /bin/sh /script/inotify.sh > /dev/null 2>&1 &
+
+
+测试：
+重启电脑，测试二台服务器中/var/www的内容是否能同步
+不重启电脑，手动执行脚本也可以测试
+sh /script/inotify.sh
+相关参数说明
+特别注意：在远程使用unison时，在远程主机和目录直接要多加一个"/"
+force    表示会以本地所指定文件夹为标准，将该目录同步到远端。这里需要注意，如果指定了force参数，那么Unison就变成了单项同步了，也就是说会以force指定的文件夹为准进行同步，类似与rsync。
+ 
+Unison双向同步基本原理是：假如有A B两个文件夹，A文件夹把自己的改动同步到B，B文件夹也把自己的改动同步到A，最后A B两文件夹的内容相同，是AB文件夹的合集。
+ 
+Unison双向同步的一个缺点是：对于一个文件在两个同步文件夹中都被修改时，unison是不会去同步的，因为unison无法判断以那个为准。
+ 
+testserver      该参数用来测试连通性，连接到服务器后退出，并不进行实际的同步
+servercmd       指定服务器端的unison命令路径
+ignore = Path   表示忽略指定目录，即同步时不同步它。
+batch = true    表示全自动模式，接受缺省动作，并执行。
+-fastcheck true 表示同步时仅通过文件的创建时间来比较，如果选项为false，Unison则将比较两地文件的内容。
+log = true      表示在终端输出运行信息。
+logfile         指定输出的log文件。
+另外，Unison有很多参数，这里仅介绍常用的几个，详细的请参看Unison手册。
+-auto           接受缺省的动作，然后等待用户确认是否执行。
+-batch          batch mode, 全自动模式，接受缺省动作，并执行。
+-ignore xxx     增加 xxx 到忽略列表中
+-ignorecase [true|false|default]   是否忽略文件名大小写
+-follow xxx    是否支持对符号连接指向内容的同步
+owner = true   保持同步过来的文件属主
+group = true   保持同步过来的文件组信息
+perms = -1     保持同步过来的文件读写权限
+repeat = 1     间隔1秒后,开始新的一次同步检查
+retry = 3      失败重试次数
+sshargs = -C   使用ssh的压缩传输方式
+xferbycopying  优化参数，默认true
+-immutable xxx   不变目录，扫描时可以忽略
+-silent          安静模式，除了错误，不打印任何信息
+-times           同步修改时间
+-path xxx        只同步 -path 参数指定的子目录以及文件，而非整个目录，-path 可以多次出现。

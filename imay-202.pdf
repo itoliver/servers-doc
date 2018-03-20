@@ -1,0 +1,585 @@
+%PDF-1.3
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/Contents 4 0 R>>
+endobj
+4 0 obj
+<</Length 6013>>
+stream
+2 J
+0.57 w
+BT /F1 12.00 Tf ET
+0.784 0.784 0.784 rg
+BT /F2 11.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 803.15 Td (IMay - 功能 #202) Tj ET Q
+BT /F1 8.00 Tf ET
+BT /F2 11.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 788.98 Td (利用Nginx将海外节点请求跳转回大陆) Tj ET Q
+BT /F1 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 775.71 Td (2016-08-19 10:36 - Viman) Tj ET Q
+BT /F2 9.00 Tf ET
+28.35 756.85 m 28.35 742.67 l S 28.35 756.85 m 127.56 756.85 l S q 0.000 0.000 0.000 rg BT 31.19 747.06 Td (状态:) Tj ET Q
+BT /F1 9.00 Tf ET
+127.56 756.85 m 297.64 756.85 l S 297.64 756.85 m 297.64 742.67 l S q 0.000 0.000 0.000 rg BT 130.40 747.06 Td (已关闭) Tj ET Q
+BT /F2 9.00 Tf ET
+297.64 756.85 m 297.64 742.67 l S 297.64 756.85 m 396.85 756.85 l S q 0.000 0.000 0.000 rg BT 300.48 747.06 Td (开始日期:) Tj ET Q
+BT /F1 9.00 Tf ET
+396.85 756.85 m 566.93 756.85 l S 566.93 756.85 m 566.93 742.67 l S q 0.000 0.000 0.000 rg BT 399.69 747.06 Td (2016-08-19) Tj ET Q
+BT /F2 9.00 Tf ET
+28.35 742.67 m 28.35 728.50 l S q 0.000 0.000 0.000 rg BT 31.19 732.89 Td (优先级:) Tj ET Q
+BT /F1 9.00 Tf ET
+297.64 742.67 m 297.64 728.50 l S q 0.000 0.000 0.000 rg BT 130.40 732.89 Td (普通) Tj ET Q
+BT /F2 9.00 Tf ET
+297.64 742.67 m 297.64 728.50 l S q 0.000 0.000 0.000 rg BT 300.48 732.89 Td (计划完成日期:) Tj ET Q
+BT /F1 9.00 Tf ET
+566.93 742.67 m 566.93 728.50 l S 
+BT /F2 9.00 Tf ET
+28.35 728.50 m 28.35 714.33 l S q 0.000 0.000 0.000 rg BT 31.19 718.71 Td (指派给:) Tj ET Q
+BT /F1 9.00 Tf ET
+297.64 728.50 m 297.64 714.33 l S q 0.000 0.000 0.000 rg BT 130.40 718.71 Td (Viman) Tj ET Q
+BT /F2 9.00 Tf ET
+297.64 728.50 m 297.64 714.33 l S q 0.000 0.000 0.000 rg BT 300.48 718.71 Td (% 完成:) Tj ET Q
+BT /F1 9.00 Tf ET
+566.93 728.50 m 566.93 714.33 l S q 0.000 0.000 0.000 rg BT 399.69 718.71 Td (100%) Tj ET Q
+BT /F2 9.00 Tf ET
+28.35 714.33 m 28.35 700.15 l S q 0.000 0.000 0.000 rg BT 31.19 704.54 Td (类别:) Tj ET Q
+BT /F1 9.00 Tf ET
+297.64 714.33 m 297.64 700.15 l S 
+BT /F2 9.00 Tf ET
+297.64 714.33 m 297.64 700.15 l S q 0.000 0.000 0.000 rg BT 300.48 704.54 Td (预期时间:) Tj ET Q
+BT /F1 9.00 Tf ET
+566.93 714.33 m 566.93 700.15 l S q 0.000 0.000 0.000 rg BT 399.69 704.54 Td (0.00 小时) Tj ET Q
+BT /F2 9.00 Tf ET
+28.35 700.15 m 28.35 685.98 l S q 0.000 0.000 0.000 rg BT 31.19 690.37 Td (目标版本:) Tj ET Q
+BT /F1 9.00 Tf ET
+297.64 700.15 m 297.64 685.98 l S 
+BT /F2 9.00 Tf ET
+297.64 700.15 m 297.64 685.98 l S q 0.000 0.000 0.000 rg BT 300.48 690.37 Td (耗时:) Tj ET Q
+BT /F1 9.00 Tf ET
+566.93 700.15 m 566.93 685.98 l S q 0.000 0.000 0.000 rg BT 399.69 690.37 Td (0.00 小时) Tj ET Q
+BT /F2 9.00 Tf ET
+28.35 685.98 m 28.35 671.81 l S 28.35 685.98 m 566.93 685.98 l S 566.93 685.98 m 566.93 671.81 l S q 0.000 0.000 0.000 rg BT 31.19 676.19 Td (描述) Tj ET Q
+BT /F1 9.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 647.85 Td (    1. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 46.80 647.85 Td (原理:  nginx_porxy  反向代理, 请海外ip请求返回到大陆真实服务器上) Tj ET Q
+28.35 671.81 m 28.35 629.29 l S 566.93 671.81 m 566.93 629.29 l S 28.35 629.29 m 566.93 629.29 l S 
+28.35 629.29 m 566.93 629.29 l S 
+BT /F2 9.00 Tf ET
+28.35 600.94 m 566.93 600.94 l S q 0.000 0.000 0.000 rg BT 31.19 605.33 Td (历史记录) Tj ET Q
+BT /F2 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 591.45 Td (#1 - 2016-08-19 10:38 - Viman) Tj ET Q
+BT /F3 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 577.28 Td (- 状态 从 新建 变更为 进行中) Tj ET Q
+BT /F1 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 534.76 Td (    1. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 534.76 Td (环境说明:  大陆一台为真实服务器，存放真实数据；  香港服务器安装nginx做代理转发) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 520.59 Td (    2. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 520.59 Td (DNS解析方面:   同一个域名做2条A记录) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 506.42 Td (    3. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 506.42 Td (香港服务器配置\(基于https\)：) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 478.07 Td (http段：) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 449.72 Td (http {) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 435.55 Td (    include       mime.types;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 421.38 Td (    default_type  application/octet-stream;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 393.03 Td (    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" ') Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 378.86 Td (                      '$status $body_bytes_sent "$http_referer" ') Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 364.68 Td (                      '"$http_user_agent" "$http_x_forwarded_for" - "$http_x_access_token"';) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 336.34 Td (    access_log  /var/log/nginx/logs/access.log  main;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 307.99 Td (    sendfile        on;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 293.82 Td (    charset         utf-8;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 279.64 Td (    server_tokens   off;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 265.47 Td (    tcp_nopush      on;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 251.30 Td (    tcp_nodelay     on;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 237.12 Td (    #tcp_nopush     on;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 208.78 Td (    #keepalive_timeout  0;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 194.60 Td (    keepalive_timeout  65;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 166.26 Td (    gzip on;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 152.08 Td (    gzip_min_length  1k;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 137.91 Td (    gzip_buffers     4 16k;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 123.74 Td (    gzip_http_version 1.0;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 109.57 Td (    gzip_comp_level 2;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 95.39 Td (    gzip_types       text/plain application/x-javascript text/css application/xml;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 81.22 Td (    gzip_vary on;) Tj ET Q
+
+BT /F3 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 45.35 33.03 Td (2016-10-26) Tj ET Q
+q 0.000 0.000 0.000 rg BT 521.24 33.03 Td (1/5) Tj ET Q
+
+
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/Contents 6 0 R>>
+endobj
+6 0 obj
+<</Length 3068>>
+stream
+2 J
+0.57 w
+BT /F1 8.00 Tf ET
+0.784 0.784 0.784 rg
+q 0.000 0.000 0.000 rg BT 45.36 804.05 Td (    #proxy config) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 789.88 Td (    large_client_header_buffers 4 16k;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 775.71 Td (    client_max_body_size 300m;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 761.53 Td (    client_body_buffer_size 128k;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 747.36 Td (    proxy_connect_timeout 600;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 733.19 Td (    proxy_read_timeout 600;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 719.01 Td (    proxy_send_timeout 600;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 704.84 Td (    proxy_buffer_size 64k;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 690.67 Td (    proxy_buffers   4 32k;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 676.49 Td (    proxy_busy_buffers_size 64k;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 662.32 Td (    proxy_temp_file_write_size 64k;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 633.97 Td (    #gzip  on;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 605.63 Td (   include  /usr/local/nginx-1.8.1/conf/vhost/*.conf;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 577.28 Td (}) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 548.94 Td (server 段：) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 520.59 Td (server) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 506.42 Td ({) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 492.24 Td (    listen 80;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 463.90 Td (    server_name a.com;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 435.55 Td (    location / {) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 421.38 Td (        proxy_redirect off;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 407.20 Td (        proxy_set_header Host $host;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 393.03 Td (        proxy_set_header X-Real-IP $remote_addr;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 378.86 Td (        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 364.68 Td (        proxy_pass a.com;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 336.34 Td (    }) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 307.99 Td (    access_log /var/log/nginx/a_access.log;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 279.64 Td (}) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 251.30 Td (server {) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 237.12 Td (        ### server port and name ###) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 208.78 Td (        listen          443 ssl;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 180.43 Td (        server_name     a.com;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 152.08 Td (        ssl on;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 137.91 Td (        underscores_in_headers on;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 109.57 Td (        ### SSL log files ###) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 81.22 Td (         access_log      /var/log/nginx/assl_access.log main;) Tj ET Q
+
+BT /F3 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 45.35 33.03 Td (2016-10-26) Tj ET Q
+q 0.000 0.000 0.000 rg BT 521.24 33.03 Td (2/5) Tj ET Q
+
+
+endstream
+endobj
+7 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/Contents 8 0 R>>
+endobj
+8 0 obj
+<</Length 3997>>
+stream
+2 J
+0.57 w
+BT /F1 8.00 Tf ET
+0.784 0.784 0.784 rg
+q 0.000 0.000 0.000 rg BT 45.36 804.05 Td (        #error_log       logs/ssl-error.log;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 775.71 Td (        ### SSL cert files ###) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 761.53 Td (        ssl_certificate      ssl/gd_bundle-g2-g1.crt;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 747.36 Td (        ssl_certificate_key  ssl/new.key;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 733.19 Td (        ### Add SSL specific settings here ###) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 719.01 Td (        keepalive_timeout    60;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 690.67 Td (        ###  Limiting Ciphers ########################) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 676.49 Td (        # Uncomment as per your setup) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 662.32 Td (        #ssl_ciphers HIGH:!ADH;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 648.15 Td (        #ssl_perfer_server_ciphers on;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 633.97 Td (        #ssl_protocols SSLv3;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 619.80 Td (        ##############################################) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 605.63 Td (        ### We want full access to SSL via backend ###) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 577.28 Td (        location / {) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 548.94 Td (                proxy_pass  https://a.com;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 520.59 Td (                ### force timeouts if one of backend is died ##) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 506.42 Td (                proxy_next_upstream error timeout invalid_header http_500 http_502 http_503;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 478.07 Td (                ### Set headers ####) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 463.90 Td (                proxy_set_header Host $host;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 449.72 Td (                proxy_set_header X-Real-IP $remote_addr;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 435.55 Td (                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 421.38 Td (                #proxy_set_header x-access_token $http_x_access_token;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 407.20 Td (                #proxy_set_header x-from $http_x_from;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 378.86 Td (                ### Most PHP, Python, Rails, Java App can use this header ###) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 364.68 Td (                #proxy_set_header X-Forwarded-Proto https;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 350.51 Td (                proxy_pass_request_headers      on;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 336.34 Td (                #proxy_connect_timeout 60;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 322.16 Td (                #proxy_read_timeout 150;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 307.99 Td (                ### By default we don't want to redirect it ####) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 293.82 Td (                proxy_redirect     off;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 279.64 Td (                }) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 251.30 Td (}) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 208.78 Td (    4. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 208.78 Td (iptables 配置：) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 180.43 Td (-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 152.08 Td (-A INPUT -m state --state NEW -m tcp -p tcp --dport 443 -j ACCEPT) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 109.57 Td (    5. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 109.57 Td (vi /etc/hosts \(一定要配哦，要是行成死循环那就不怪我\)) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 95.39 Td (112.10.10.10  a.com) Tj ET Q
+
+BT /F2 8.00 Tf ET
+BT /F3 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 45.35 33.03 Td (2016-10-26) Tj ET Q
+q 0.000 0.000 0.000 rg BT 528.32 33.03 Td (3/5) Tj ET Q
+
+endstream
+endobj
+9 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/Contents 10 0 R>>
+endobj
+10 0 obj
+<</Length 3927>>
+stream
+2 J
+0.57 w
+BT /F2 8.00 Tf ET
+0.784 0.784 0.784 rg
+q 0.000 0.000 0.000 rg BT 31.19 804.05 Td (#2 - 2016-08-19 14:35 - Viman) Tj ET Q
+BT /F3 8.00 Tf ET
+BT /F1 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 775.71 Td (    1. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 775.71 Td (普通http配置) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 747.36 Td (server) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 733.19 Td ({) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 719.01 Td (    listen 80;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 690.67 Td (    server_name bbs.imay.com;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 662.32 Td (    location / {) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 648.15 Td (        proxy_redirect off;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 633.97 Td (        proxy_set_header Host $host;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 619.80 Td (        proxy_set_header X-Real-IP $remote_addr;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 605.63 Td (        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 591.45 Td (        proxy_pass http://bbs.imay.com; ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 577.28 Td (    }) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 548.94 Td (    access_log /home/nginx/logs/bbs_imay_access.log;) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 520.59 Td (}) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 478.07 Td (    2. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 478.07 Td (访问测试) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 463.90 Td (        1. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 51.69 463.90 Td (大陆) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 435.55 Td ([root@localhost ~]# curl -v http://bbs.imay.com/bbs.html) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 421.38 Td (* About to connect\(\) to bbs.imay.com port 80 \(#0\)) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 407.20 Td (*   Trying 120.76.207.220... connected) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 393.03 Td (* Connected to bbs.imay.com \(120.76.207.220\) port 80 \(#0\)) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 378.86 Td (> GET /bbs.html HTTP/1.1) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 364.68 Td (> User-Agent: curl/7.19.7 \(x86_64-redhat-linux-gnu\) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 350.51 Td (> Host: bbs.imay.com) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 336.34 Td (> Accept: */*) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 322.16 Td (> ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 307.99 Td (< HTTP/1.1 200 OK) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 293.82 Td (< Server: nginx/1.10.1) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 279.64 Td (< Date: Fri, 19 Aug 2016 06:22:21 GMT) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 265.47 Td (< Content-Type: text/html; charset=utf-8) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 251.30 Td (< Content-Length: 16) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 237.12 Td (< Last-Modified: Fri, 19 Aug 2016 06:13:59 GMT) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 222.95 Td (< Connection: keep-alive) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 208.78 Td (< ETag: "57b6a3a7-10" ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 194.60 Td (< Accept-Ranges: bytes) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 180.43 Td (< ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 166.26 Td (My Imay bbs CN) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 137.91 Td (* Connection #0 to host bbs.imay.com left intact) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 123.74 Td (* Closing connection #0) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 109.57 Td ([root@localhost ~]# ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 95.39 Td ([root@localhost ~]# nslookup bbs.imay.com) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 81.22 Td (Server:        192.168.0.1) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 67.05 Td (Address:    192.168.0.1#53) Tj ET Q
+BT /F3 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 45.35 33.03 Td (2016-10-26) Tj ET Q
+q 0.000 0.000 0.000 rg BT 521.24 33.03 Td (4/5) Tj ET Q
+
+
+endstream
+endobj
+11 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/Contents 12 0 R>>
+endobj
+12 0 obj
+<</Length 2985>>
+stream
+2 J
+0.57 w
+BT /F1 8.00 Tf ET
+0.784 0.784 0.784 rg
+
+q 0.000 0.000 0.000 rg BT 45.36 789.88 Td (Name:    bbs.imay.com) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 775.71 Td (Address: 120.76.207.220) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 733.19 Td (        2. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 51.69 733.19 Td (HK的机器访问（用另外的，不能用hk跳板机的了,因为写死了Host）) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 704.84 Td (curl -v http://bbs.imay.com/bbs.html) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 690.67 Td (* About to connect\(\) to bbs.imay.com port 80 \(#0\)) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 676.49 Td (*   Trying 43.254.217.240... connected) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 662.32 Td (* Connected to bbs.imay.com \(43.254.217.240\) port 80 \(#0\)) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 648.15 Td (> GET /bbs.html HTTP/1.1) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 633.97 Td (> User-Agent: curl/7.19.7 \(x86_64-redhat-linux-gnu\) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 619.80 Td (> Host: bbs.imay.com) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 605.63 Td (> Accept: */*) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 591.45 Td (> ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 577.28 Td (< HTTP/1.1 200 OK) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 563.11 Td (< Server: nginx) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 548.94 Td (< Date: Fri, 19 Aug 2016 06:29:22 GMT) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 534.76 Td (< Content-Type: text/html; charset=utf-8) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 520.59 Td (< Content-Length: 16) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 506.42 Td (< Connection: keep-alive) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 492.24 Td (< Last-Modified: Fri, 19 Aug 2016 06:13:59 GMT) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 478.07 Td (< ETag: "57b6a3a7-10" ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 463.90 Td (< Accept-Ranges: bytes) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 449.72 Td (< ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 435.55 Td (My Imay bbs CN) Tj ET Q
+
+q 0.000 0.000 0.000 rg BT 45.36 407.20 Td (* Connection #0 to host bbs.imay.com left intact) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.36 393.03 Td (* Closing connection #0) Tj ET Q
+
+
+BT /F2 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 307.99 Td (#3 - 2016-08-19 14:38 - Viman) Tj ET Q
+BT /F3 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 293.82 Td (- 状态 从 进行中 变更为 已解决) Tj ET Q
+q 0.000 0.000 0.000 rg BT 31.19 279.64 Td (- % 完成 从 0 变更为 100) Tj ET Q
+BT /F1 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 237.12 Td (    1. ) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.06 237.12 Td (测试ok) Tj ET Q
+
+BT /F2 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 194.60 Td (#4 - 2016-10-19 09:53 - Viman) Tj ET Q
+BT /F3 8.00 Tf ET
+q 0.000 0.000 0.000 rg BT 31.19 180.43 Td (- 状态 从 已解决 变更为 已关闭) Tj ET Q
+q 0.000 0.000 0.000 rg BT 45.35 33.03 Td (2016-10-26) Tj ET Q
+q 0.000 0.000 0.000 rg BT 528.32 33.03 Td (5/5) Tj ET Q
+
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R ]
+/Count 5
+/MediaBox [0 0 595.28 841.89]
+>>
+endobj
+13 0 obj
+<</Type /Font
+/Subtype /Type0
+/BaseFont /STSongStd-Light-Acro-GBKp-EUC-H
+/Encoding /GBKp-EUC-H
+/DescendantFonts [14 0 R]
+>>
+endobj
+14 0 obj
+<</Type /Font
+/Subtype /CIDFontType0
+/BaseFont /STSongStd-Light-Acro
+/CIDSystemInfo <</Registry (Adobe) /Ordering (GB1) /Supplement 2>>
+/FontDescriptor 15 0 R
+/W [1 [207 270 342 467 462 797 710 239 374 374 423 605 238 375 238 334 462 462 462 462 462 462 462 462 462 462 238 238 605 605 605 344 748 684 560 695 739 563 511 729 793 318 312 666 526 896 758 772 544 772 628 465 607 753 711 972 647 620 607 374 333 374 606 500 239 417 503 427 529 415 264 444 518 241 230 495 228 793 527 524 524 504 338 336 277 517 450 652 466 452 407 370 258 370 605 ]]>>
+endobj
+15 0 obj
+<</Type /FontDescriptor
+/FontName /STSongStd-Light-Acro
+/Flags 6
+/FontBBox [0 -200 1000 900]
+/ItalicAngle 0
+/Ascent 800
+/Descent -200
+/CapHeight 800
+/StemV 50
+>>
+endobj
+16 0 obj
+<</Type /Font
+/Subtype /Type0
+/BaseFont /STSongStd-Light-Acro,Bold-GBKp-EUC-H
+/Encoding /GBKp-EUC-H
+/DescendantFonts [17 0 R]
+>>
+endobj
+17 0 obj
+<</Type /Font
+/Subtype /CIDFontType0
+/BaseFont /STSongStd-Light-Acro,Bold
+/CIDSystemInfo <</Registry (Adobe) /Ordering (GB1) /Supplement 2>>
+/FontDescriptor 18 0 R
+/W [1 [207 270 342 467 462 797 710 239 374 374 423 605 238 375 238 334 462 462 462 462 462 462 462 462 462 462 238 238 605 605 605 344 748 684 560 695 739 563 511 729 793 318 312 666 526 896 758 772 544 772 628 465 607 753 711 972 647 620 607 374 333 374 606 500 239 417 503 427 529 415 264 444 518 241 230 495 228 793 527 524 524 504 338 336 277 517 450 652 466 452 407 370 258 370 605 ]]>>
+endobj
+18 0 obj
+<</Type /FontDescriptor
+/FontName /STSongStd-Light-Acro,Bold
+/Flags 6
+/FontBBox [0 -200 1000 900]
+/ItalicAngle 0
+/Ascent 800
+/Descent -200
+/CapHeight 800
+/StemV 50
+>>
+endobj
+19 0 obj
+<</Type /Font
+/Subtype /Type0
+/BaseFont /STSongStd-Light-Acro,Italic-GBKp-EUC-H
+/Encoding /GBKp-EUC-H
+/DescendantFonts [20 0 R]
+>>
+endobj
+20 0 obj
+<</Type /Font
+/Subtype /CIDFontType0
+/BaseFont /STSongStd-Light-Acro,Italic
+/CIDSystemInfo <</Registry (Adobe) /Ordering (GB1) /Supplement 2>>
+/FontDescriptor 21 0 R
+/W [1 [207 270 342 467 462 797 710 239 374 374 423 605 238 375 238 334 462 462 462 462 462 462 462 462 462 462 238 238 605 605 605 344 748 684 560 695 739 563 511 729 793 318 312 666 526 896 758 772 544 772 628 465 607 753 711 972 647 620 607 374 333 374 606 500 239 417 503 427 529 415 264 444 518 241 230 495 228 793 527 524 524 504 338 336 277 517 450 652 466 452 407 370 258 370 605 ]]>>
+endobj
+21 0 obj
+<</Type /FontDescriptor
+/FontName /STSongStd-Light-Acro,Italic
+/Flags 6
+/FontBBox [0 -200 1000 900]
+/ItalicAngle 0
+/Ascent 800
+/Descent -200
+/CapHeight 800
+/StemV 50
+>>
+endobj
+22 0 obj
+<</Type /Font
+/Subtype /Type0
+/BaseFont /STSongStd-Light-Acro,BoldItalic-GBKp-EUC-H
+/Encoding /GBKp-EUC-H
+/DescendantFonts [23 0 R]
+>>
+endobj
+23 0 obj
+<</Type /Font
+/Subtype /CIDFontType0
+/BaseFont /STSongStd-Light-Acro,BoldItalic
+/CIDSystemInfo <</Registry (Adobe) /Ordering (GB1) /Supplement 2>>
+/FontDescriptor 24 0 R
+/W [1 [207 270 342 467 462 797 710 239 374 374 423 605 238 375 238 334 462 462 462 462 462 462 462 462 462 462 238 238 605 605 605 344 748 684 560 695 739 563 511 729 793 318 312 666 526 896 758 772 544 772 628 465 607 753 711 972 647 620 607 374 333 374 606 500 239 417 503 427 529 415 264 444 518 241 230 495 228 793 527 524 524 504 338 336 277 517 450 652 466 452 407 370 258 370 605 ]]>>
+endobj
+24 0 obj
+<</Type /FontDescriptor
+/FontName /STSongStd-Light-Acro,BoldItalic
+/Flags 6
+/FontBBox [0 -200 1000 900]
+/ItalicAngle 0
+/Ascent 800
+/Descent -200
+/CapHeight 800
+/StemV 50
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 13 0 R
+/F2 16 0 R
+/F3 19 0 R
+/F4 22 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+25 0 obj
+<<
+/Producer (TCPDF via RFPDF 1.53.0.TC031 \(http://tcpdf.sourceforge.net\))
+/Title <FEFF0049004D006100790020002D0020529F80FD00200023003200300032>
+/Creator (Redmine)
+/CreationDate (D:20161026175110)
+>>
+endobj
+26 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 27
+0000000000 65535 f 
+0000020644 00000 n 
+0000024365 00000 n 
+0000000009 00000 n 
+0000000087 00000 n 
+0000006150 00000 n 
+0000006228 00000 n 
+0000009346 00000 n 
+0000009424 00000 n 
+0000013471 00000 n 
+0000013550 00000 n 
+0000017528 00000 n 
+0000017608 00000 n 
+0000020756 00000 n 
+0000020896 00000 n 
+0000021463 00000 n 
+0000021641 00000 n 
+0000021786 00000 n 
+0000022358 00000 n 
+0000022541 00000 n 
+0000022688 00000 n 
+0000023262 00000 n 
+0000023447 00000 n 
+0000023598 00000 n 
+0000024176 00000 n 
+0000024503 00000 n 
+0000024721 00000 n 
+trailer
+<<
+/Size 27
+/Root 26 0 R
+/Info 25 0 R
+>>
+startxref
+24825
+%%EOF

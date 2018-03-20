@@ -1,0 +1,131 @@
+#安装lnmp环境
+#安装依赖包
+yum install net-snmp net-snmp-devel
+
+#下载zabbix相关软件
+
+#http://www.zabbix.com/download.php 
+
+cd /usr/local/src
+wget http://nchc.dl.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Stable/3.2.1/zabbix-3.2.6.tar.gz
+tar -zxvf zabbix-3.2.1.tar.gz
+cd zabbix-3.2.1
+./configure --prefix=/usr/local/zabbix --enable-server --enable-agent --with -mysql --with-net-snmp --with-libcurl --with-libxml2
+make
+make install
+
+#添加zabbix用户
+
+groupadd zabbix
+useradd -g zabbix zabbix -s /bin/false
+
+#初始化数据库
+mysql -uroot -p
+
+mysql>create database zabbix default charset utf8;
+mysql>grant all privileges on zabbix.* to 'zabbix'@'localhost' identified by '123456' with grant option;
+mysql>flush privileges;
+mysql>exit
+
+mysql -uzabbix -p123456 zabbix < database/mysql/schema.sql
+mysql -uzabbix -p123456 zabbix < database/mysql/images.sql
+mysql -uzabbix -p123456 zabbix < database/mysql/data.sql
+
+#修改配置
+cp /misc/init.d/fedora/core5/zabbix_server /etc/init.d/
+cp /misc/init.d/fedora/core5/zabbix_agentd /etc/init.d/
+chmod 755 /etc/init.d/zabbix*
+vim /etc/init.d/zabbix_server 
+	#修改zabbix_bin
+	ZABBIX_BIN = "/usr/local/zabbix/sbin/zabbix_server"
+
+vim /etc/init.d/zabbix_agentd
+	#修改zabbix_bin
+	ZABBIX_BIN = "/usr/local/zabbix/sbin/zabbix_server"
+
+vim /usr/local/zabbix/etc/zabbix_server.conf
+	DBName=zabbix
+	DBUser=zabbix
+	DBpassword=zabbix123
+	AlertScriptsPath=/usr/local/zabbix/share/zabbix/externalscripts #脚本指定目录
+
+vim /usr/local/zabbix/etc/zabbix_agent.conf
+	server=127.0.0.1
+	serverActive=127.0.0.1
+	Hostname=zabbix server
+	
+#修改php配置
+vim /usr/loca/php/etc/php.init
+	max_execution_time = 300
+	max_input_time = 300
+	date.timezone = asia/ShangHai
+	post_max_size = 32M
+
+/etc/init.d/php-fpm reload
+
+#配置nginx
+mkdir /usr/local/nginx/html/zabbix
+cp -r frontend/php/* /usrl/local/nginx/html/zabbix
+chown -R nginx.nginx /usr/local/nginx/html/zabbix
+
+#启动服务
+/etc/init.d/zabbix_server start
+/etc/init.d/zabbix_agentd start
+chkconfig zabbix_server on
+chkconfig zabbix_agentd on
+
+#修改主配置文件
+cp /usr/local/zabbix/conf/zabbix.conf.php.example /usr/local/zabbix/conf/zabbix.conf.php
+vim /usr/local/zabbix/conf/zabbix.conf.php
+#----------------------------------------------------------------------------------------------
+<?php
+// Zabbix GUI configuration file.
+global $DB;
+
+$DB['TYPE']                      = 'MYSQL';
+$DB['SERVER']                  = 'localhost';
+$DB['PORT']                      = '3306';
+$DB['DATABASE']              = 'zabbix';
+$DB['USER']                      = 'zabbix';
+$DB['PASSWORD']             = 'zabbix123';
+// Schema name. Used for IBM DB2 and PostgreSQL.
+$DB['SCHEMA']                  = '';
+
+$ZBX_SERVER                    = 'localhost';
+$ZBX_SERVER_PORT           = '10051';
+$ZBX_SERVER_NAME           = 'admin';
+
+$IMAGE_FORMAT_DEFAULT   = IMAGE_FORMAT_PNG;
+#-----------------------------------------------------------------------------------------------
+#nginx配置文件
+server {
+        listen 80;
+        server_name fatmouse.com;
+        access_log logs/zabbix_access.log;
+        error_log logs/zabbix_error.log error;
+        index index.php;
+        root /usr/local/nginx/html/;
+
+location ~* \.(eot|ttf|woff)$ {
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Allow-Credentials true;
+        add_header Access-Control-Allow-Headers Content-Type,Accept;
+        add_header Access-Control-Allow-Methods GET;
+        }
+
+location ~ .*\.(js|css)?$ {
+        expires 1h;
+        }
+
+location ~*.*\.(php|php5|php7)$ {
+            include        fastcgi_params;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        }
+}
+
+#重启nginx
+/etc/init.d/nginx reload
+
+#在浏览器输入 http://192.168.1.16/zabbix输入相关信息
