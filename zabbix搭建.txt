@@ -32,8 +32,8 @@ mysql -uzabbix -p123456 zabbix < database/mysql/images.sql
 mysql -uzabbix -p123456 zabbix < database/mysql/data.sql
 
 #修改配置
-cp /misc/init.d/fedora/core5/zabbix_server /etc/init.d/
-cp /misc/init.d/fedora/core5/zabbix_agentd /etc/init.d/
+cp ./misc/init.d/fedora/core5/zabbix_server /etc/init.d/
+cp ./misc/init.d/fedora/core5/zabbix_agentd /etc/init.d/
 chmod 755 /etc/init.d/zabbix*
 vim /etc/init.d/zabbix_server 
 	#修改zabbix_bin
@@ -65,7 +65,7 @@ vim /usr/loca/php/etc/php.init
 
 #配置nginx
 mkdir /usr/local/nginx/html/zabbix
-cp -r frontend/php/* /usrl/local/nginx/html/zabbix
+cp -r frontend/php/* /usr/local/nginx/html/zabbix
 chown -R nginx.nginx /usr/local/nginx/html/zabbix
 
 #启动服务
