@@ -1,6 +1,6 @@
 #安装lnmp环境
 #安装依赖包
-yum install net-snmp net-snmp-devel
+yum install -y net-snmp net-snmp-devel
 
 #下载zabbix相关软件
 
