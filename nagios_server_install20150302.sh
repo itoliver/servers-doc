@@ -1,34 +1,24 @@
 #!/bin/bash
 #
-#Created By ck
-#
-#Version 1.0
 
-cat << EOF
-+------------------------------------------+
-|    === Welcome to install nagios ===     |
-+------------------------------------------+
-+----------------By ck---------------------+
-EOF
-
-#YumÒÀÀµ°ü
+#Yumä¾èµ–åŒ…
 yum install -y bash glibc gcc gcc-c++ openssl-devel zlib-devel pcre-devel libtool perl-devel automake gd gd-devel libjpeg* libpng* php-common php-gd ncurses* libtool* libxml2 libxml2-devel
 
-#±àÒëNginx
+#ç¼–è¯‘Nginx
 tar zxf nginx-1.7.10.tar.gz 
 cd nginx-1.7.10
 ./configure --prefix=/usr/local/nginx --user=nginx --group=nginx --with-http_ssl_module --with-http_gzip_static_module \
 --with-http_stub_status_module --http-fastcgi-temp-path=/usr/local/nginx/fcgi
 make && make install
 
-#Ìí¼ÓÕËºÅ
+#æ·»åŠ è´¦å·
 useradd -m -s /bin/bash nagios
 useradd nginx -d /dev/null -s /sbin/nologin
 groupadd nagcmd
 usermod -a -G nagcmd nagios
 usermod -a -G nagcmd nginx
 
-#±àÒëNagios
+#ç¼–è¯‘Nagios
 #wget http://sourceforge.net/projects/nagios-cn/files/sourcecode/zh_CN%203.2.3/nagios-cn-3.2.3.tar.bz2
 cd ..
 tar xf nagios-cn-3.2.3.tar.bz2
@@ -41,7 +31,7 @@ make install-config
 make install-commandmode
 chmod o+rwx /usr/local/nagios/var/rw 
 
-#±àÒëNagios-plugins
+#ç¼–è¯‘Nagios-plugins
 #wget http://nagios-plugins.org/download/nagios-plugins-2.0.3.tar.gz
 cd ..
 tar zxvf nagios-plugins-2.0.3.tar.gz
@@ -50,7 +40,7 @@ cd  nagios-plugins-2.0.3
 make
 make install
 
-#±àÒëNrpe
+#ç¼–è¯‘Nrpe
 #wget http://iweb.dl.sourceforge.net/project/nagios/nrpe-2.x/nrpe-2.13/nrpe-2.13.tar.gz
 cd ..
 tar zxf nrpe-2.13.tar.gz 
@@ -61,12 +51,12 @@ make install-plugin
 make install-daemon
 make install-daemon-config
 
-#Æô¶¯Nrpe
+#å¯åŠ¨Nrpe
 /usr/local/nagios/bin/nrpe -c /usr/local/nagios/etc/nrpe.cfg -d
 lsof -i:5666
 /usr/local/nagios/libexec/check_nrpe -H localhost -c check_users
 
-#¼ÓÔØNagios·þÎñ
+#åŠ è½½NagiosæœåŠ¡
 chkconfig --add nagios
 chkconfig nagios on
 chown nagios.nagcmd /usr/local/nagios/var/rw
@@ -75,11 +65,11 @@ vim ~/.bashrc
 alias check='/usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg'
 source ~/.bashrc
 
-# È¡ÏûÓÃ»§ÈÏÖ¤(·½±ãµ÷ÊÔ)
+# å–æ¶ˆç”¨æˆ·è®¤è¯(æ–¹ä¾¿è°ƒè¯•)
 # htpasswd -C /usr/local/nagios/etc/htpasswd.users nagiosadmin
-sed -i 's@use_authentication=1@use_authentication=0@' /usr/local/nagios/etc/cgi.cfg
+sed -i 's#use_authentication=1#use_authentication=0#' /usr/local/nagios/etc/cgi.cfg
 
-#±àÒëFastcgi perl
+#ç¼–è¯‘Fastcgi perl
 wget http://search.cpan.org/CPAN/authors/id/B/BO/BOBTFISH/FCGI-0.70.tar.gz
 wget http://search.cpan.org/CPAN/authors/id/G/GB/GBARR/IO-1.25.tar.gz
 wget http://search.cpan.org/CPAN/authors/id/I/IN/INGY/IO-All-0.41.tar.gz
@@ -111,8 +101,8 @@ unzip perl-fcgi.zip
 cp perl-fcgi.pl /usr/local/nginx/
 chmod 755 /usr/local/nginx/perl-fcgi.pl
 
-#Perl½Å±¾
-cat >> /usr/local/nginx/start_perl_cgi.sh << EOF
+#Perlè„šæœ¬
+cat >> /usr/local/nginx/start_perl_cgi << EOF
 #!/bin/bash
 #set -x
 dir=/usr/local/nginx
@@ -149,19 +139,20 @@ start
 ;;
 restart)
 stop
+sleep 2
 start
 ;;
 esac
 
 EOF
 
-#È¨ÏÞ¼°Æô¶¯
-chmod 755 /usr/local/nginx/start_perl_cgi.sh
+#æƒé™åŠå¯åŠ¨
+chmod 755 /usr/local/nginx/start_perl_cgi
 
-/usr/local/nginx/start_perl_cgi.sh start
+/usr/local/nginx/start_perl_cgi start
 
 
-#ÅäÖÃnginx-server
+#é…ç½®nginx-server
 sed -i '/# HTTPS server/i include /usr/local/nginx/conf.d/*.conf;' /usr/local/nginx/conf/nginx.conf
 
 mkdir /usr/local/nginx/conf.d/
@@ -169,7 +160,7 @@ mkdir /usr/local/nginx/conf.d/
 cat >> /usr/local/nginx/conf.d/default.conf << EOF
 server {
     listen       80;
-    server_name  nagios.woqu.com;
+    server_name  nagios.a.com;
 
     charset utf-8;
 
